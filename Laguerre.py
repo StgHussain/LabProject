@@ -5,8 +5,7 @@ import math
 
 class Laguerre():
     
-    @classmethod
-    def LaguerreBeam(cls, p, l, x):
+    def LaguerreBeam(self, p, l, x):
         y = np.array(p + 1, 1)
         if p == 0:
             y = 1

@@ -1,13 +1,14 @@
 import numpy as np
 import scipy as scipy
 import math
-import Laguerre
+from Laguerre import Laguerre
 
 class LgBeam():
 
     def GenerateLGBeam(self, p, l, w, xx, yy):
         [rho, phi] = self.cart2pol(xx, yy)
         RhoSquaredOverWSquare = (rho*rho)/(w*w)
+        inst = Laguerre()
         lag = Laguerre()
         
         LagResult = lag.LaguerreBeam(p, abs(l), 2*RhoSquaredOverWSquare)
