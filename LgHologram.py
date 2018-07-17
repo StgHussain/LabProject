@@ -15,7 +15,7 @@ class LGHologram ():
                 factPM = math.factorial(p-m)
                 factLM = math.factorial(l+m)
                 factM2 = math.factorial(m)
-                denom = factPm * factLM * factM2
+                denom = factPM * factLM * factM2
                 y = numerator/denom 
 
     def __init__(self):
