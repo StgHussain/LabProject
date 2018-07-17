@@ -15,8 +15,9 @@ class LgBeam():
         lag = Laguerre()
         LagResult = lag.LaguerreBeam(p, abs(l), 2*RhoSquaredOverWSquare)
         Clg = math.sqrt((2*factP/ (Pi * factLP))) / w
-        Result = Clg * (self.Square2 * np.power(math.sqrt(RhoSquaredOverWSquare), abs(l))) * LagResult * math.exp(-RhoSquaredOverWSquare) * exp(j * l * phi)
-        
+        imagNum = complex(0,-l*phi)
+        Result = Clg * (self.SquareRoot2 * np.power(math.sqrt(RhoSquaredOverWSquare), abs(l))) * LagResult * math.exp(-RhoSquaredOverWSquare) * math.exp(imagNum)
+        return Result
 
     def cart2pol(self, x, y):
         r = np.sqrt(x**2 + y**2)
@@ -25,4 +26,4 @@ class LgBeam():
 
     def __init__(self):
         self.x = 0
-        self.Square2 = math.sqrt(2)
+        self.SquareRoot2 = math.sqrt(2)

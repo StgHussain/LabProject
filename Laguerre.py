@@ -17,8 +17,12 @@ class Laguerre():
                 factLM = math.factorial(l + m)
                 factM2 = math.factorial(m)
                 denom = factPM * factLM * factM2
-                y = numerator/denom 
-                return y
+                y[p + l - m] = numerator/denom 
+        #polyVal if needed
+        #y = np.polyval(y, x)
+        return y
+        
+            
 
     def __init__(self):
         self.y = 0
