@@ -25,5 +25,5 @@ class LgBeam():
         return(r, Angle)
 
     def __init__(self):
-        self.x = 0
+        
         self.SquareRoot2 = math.sqrt(2)
