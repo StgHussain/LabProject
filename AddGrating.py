@@ -4,8 +4,7 @@ import math
 
 class AddGrating():
 
-
-    def __init__(self, inputHologram, gratingNumber, gratingAngle, complexAmplitude, gratingType, complexAmplitudeType):
+    def addgrate(self, inputHologram, gratingNumber, gratingAngle, complexAmplitude, gratingType):
         Pi = math.pi
         sizeHolo = np.shape(inputHologram)
         self.x = np.linspace(-Pi, Pi, sizeHolo[0])
@@ -19,7 +18,11 @@ class AddGrating():
             self.phaseHologram = math.sin(self.phase+ gratingNumber*plane+Pi)
         else:
             self.phaseHologram = math.modf(self.phase + gratingNumber*plane, 2*Pi)-Pi
-        self.phaseHologram = (self.phaseHologram - Pi)/ (-Pi -Pi)        
+        self.phaseHologram = (self.phaseHologram - Pi)/ (-Pi -Pi)  
+
+    def __init__(self):
+        self.i = 0
+           
 
 
 
