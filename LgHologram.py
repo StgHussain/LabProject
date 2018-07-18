@@ -3,15 +3,18 @@ import scipy as scipy
 import math
 from LgBeam import LgBeam
 
-class LGHologram ():
+class LgHologram():
 
-    def calcHologramGrid(self, Xsize, Ysize, PMatrix, rowCol):
-        self.N = [Ysize, Xsize]
+    def calcHologramGrid(self):
+        self.N = [self.ySize, self.xSize]
+        self.Intensity = np.zeros[self.N]
+        self.grid = self.Lmat.shape
+        self.Intensity = np.zeros[self.N]
         self.points = self.N/self.grid
         self.range = self.N/min(self.N)
-        PMatrix[1:self.grid(1), 1:self.grid(2)] = PMatrix
+        self.Pmat[1:self.grid(1), 1:self.grid(2)] = self.Pmat
         Xcords = np.linspace(-self.range(1), self.range(1), self.points(1))
-        Ycords = np.linspace(-self.range(2)/rowCol, range(2)/rowCol, self.points(2))
+        Ycords = np.linspace(-self.range(2)/self.rowToCol, range(2)/self.rowToCol, self.points(2))
         self.FinalGrid = np.meshgrid(Xcords, Ycords)
         self.XX = self.FinalGrid [0]
         self.YY = self.FinalGrid [1]
@@ -19,8 +22,8 @@ class LGHologram ():
     def calculateIntensity(self, pMat, lMat, beamRad):
         for i in range (1, self.grid(1)):
             for j in range (1, self.grid(2)):
-                pMatVal = pMat[i, j]
-                lMatVal = lMat[i,j]
+                pMatVal = self.Pmat[i, j]
+                lMatVal = self.Lmat[i,j]
                 beamRadVal = beamRad[i,j]
                 xx = self.XX
                 yy = self.YY
@@ -38,17 +41,22 @@ class LGHologram ():
             self.complexHologram = self.Intensity
             normFactor = 1
         return normFactor
-        
+
+    def generateHologram(self, Xsize, Ysize, PMatrix, lMatrix, beamRadiusPercent): #normalize and rowToCol required
+        self.xSize = Xsize
+        self.ySize = Ysize
+        self.Pmat = PMatrix
+        self.Lmat = lMatrix
+        self.calcHologramGrid
+        self.calculateIntensity
+        self.beamRad = beamRadiusPercent
+        self.calcHologramGrid
+        self.calculateIntensity
 
 
-    def __init__(self, sizeX, sizeY, pMatrix, lMatrix, beamRadiusPercent, normalizeZeroOne, rowToCol):
-        self.p = 0
-        self.l = 1
-        self.grid = lMatrix.shape
+    def __init__(self): # normalizeZeroOne, rowToCol):
         self.normalize = True
-        self.calcHologramGrid (sizeX, sizeY, pMatrix, rowToCol)
-        self.Intensity = np.zeros[self.N]
-        self.normalFactor = self.calculateIntensity(pMatrix, lMatrix, beamRadiusPercent)
+        self.rowToCol = 1
 
 
 
