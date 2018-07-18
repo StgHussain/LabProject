@@ -22,6 +22,5 @@ class Laguerre():
         #y = np.polyval(y, x)
         return y
         
-            
-
     def __init__(self):
+        print 'start'
