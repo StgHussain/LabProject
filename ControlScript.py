@@ -6,8 +6,8 @@ from AddGrating import AddGrating
 from ShowHologram import ShowHologram
 
 sizeGrid = [1024, 1024]
-l = 0
-p = 0
+l = [0]
+p = [0]
 complexAmplitude = True
 
 gratingNumber = 50
@@ -19,6 +19,9 @@ lgHolo = LgHologram()
 addHolo = AddGrating()
 showHolo = ShowHologram()
 
+
 matrixOne = lgHolo.generateHologram(sizeGrid[0], sizeGrid[1], p, l, 0.11)
-matrixTwo = addHolo.addgrate(matrixOne, gratingNumber, gratingAngle, complexAmplitude, gratingType)
-showHolo.showImg(matrixTwo)
+print (matrixOne)
+#matrixTwo = addHolo.addgrate(matrixOne, gratingNumber, gratingAngle, complexAmplitude, gratingType)
+#print (matrixTwo)
+#showHolo.showImg(matrixTwo)

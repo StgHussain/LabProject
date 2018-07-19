@@ -6,13 +6,16 @@ from LgBeam import LgBeam
 class LgHologram():
 
     def calcHologramGrid(self):
+        print ("calc grid")
         self.N = [self.ySize, self.xSize]
-        self.Intensity = np.zeros[self.N]
-        self.grid = self.Lmat.shape
+        self.Intensity = np.zeros(self.N)
+        #self.grid = self.Lmat.shape
+        #this returns [1 1] in octave for some reason
+        self.grid = [1, 1]
         self.Intensity = np.zeros[self.N]
         self.points = self.N/self.grid
         self.range = self.N/min(self.N)
-        self.Pmat[1:self.grid(1), 1:self.grid(2)] = self.Pmat
+        self.Pmat[1:self.grid[0], 1:self.grid[2]] = self.Pmat
         Xcords = np.linspace(-self.range(1), self.range(1), self.points(1))
         Ycords = np.linspace(-self.range(2)/self.rowToCol, range(2)/self.rowToCol, self.points(2))
         self.FinalGrid = np.meshgrid(Xcords, Ycords)
@@ -20,6 +23,7 @@ class LgHologram():
         self.YY = self.FinalGrid [1]
 
     def calculateIntensity(self, pMat, lMat, beamRad):
+        print ("cal intensity")
         for i in range (1, self.grid(1)):
             for j in range (1, self.grid(2)):
                 pMatVal = self.Pmat[i, j]
@@ -43,18 +47,18 @@ class LgHologram():
         return normFactor
 
     def generateHologram(self, Xsize, Ysize, PMatrix, lMatrix, beamRadiusPercent): #normalize and rowToCol required
+        print ("gen holo")
         self.xSize = Xsize
         self.ySize = Ysize
         self.Pmat = PMatrix
         self.Lmat = lMatrix
-        self.calcHologramGrid
-        self.calculateIntensity
         self.beamRad = beamRadiusPercent
-        self.calcHologramGrid
-        self.calculateIntensity
+        self.calcHologramGrid()
+        self.calculateIntensity(PMatrix, lMatrix, beamRadiusPercent)
 
 
     def __init__(self): # normalizeZeroOne, rowToCol):
+        print ("hello")
         self.normalize = True
         self.rowToCol = 1
 

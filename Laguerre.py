@@ -20,7 +20,8 @@ class Laguerre():
                 y[p + l - m] = numerator/denom 
         #polyVal if needed
         #y = np.polyval(y, x)
+        print (y)
         return y
         
     def __init__(self):
-        print ('start')
+        print ("start")
