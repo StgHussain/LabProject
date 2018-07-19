@@ -20,7 +20,7 @@ addHolo = AddGrating()
 showHolo = ShowHologram()
 
 
-matrixOne = lgHolo.generateHologram(sizeGrid[0], sizeGrid[1], p, l, 0.11)
+normFactor, matrixOne = lgHolo.generateHologram(sizeGrid[0], sizeGrid[1], p, l, 0.11)
 print (matrixOne)
 #matrixTwo = addHolo.addgrate(matrixOne, gratingNumber, gratingAngle, complexAmplitude, gratingType)
 #print (matrixTwo)
