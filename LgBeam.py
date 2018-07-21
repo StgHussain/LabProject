@@ -5,7 +5,13 @@ import math
 
 class LgBeam():
 
-    def GenerateLGBeam(self, p, l, w, xx, yy):
+    #def GenerateLGBeam(self, p, l, w, xx, yy):
+    def GenerateLGBeam(self, p, l, w):
+        
+        Xcords = np.linspace(-self.range[0], self.range[1], self.points[0])
+        Ycords = np.linspace(-self.range[1]/self.rowToCol, self.range[1]/self.rowToCol, self.points[1])
+
+
         Pi = math.pi
         factP = math.factorial(p)
         factLP = math.factorial(abs(l) + p)
@@ -21,9 +27,12 @@ class LgBeam():
 
     def cart2pol(self, x, y):
         r = np.sqrt(x**2 + y**2)
+        print (r)
         Angle = np.arctan2(y, x)
         return(r, Angle)
 
     def __init__(self):
-
         self.SquareRoot2 = math.sqrt(2)
+        p = 0
+        l = 1
+        w = 0.12207
