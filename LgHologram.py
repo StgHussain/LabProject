@@ -37,11 +37,14 @@ class LgHologram():
                 xx = self.XX
                 yy = self.YY
                 LgBeamObj = LgBeam()
-                self.Intensity[:,:,i,j] = LgBeamObj.GenerateLGBeam(pMatVal, lMatVal, beamRadVal, xx, yy)
-        self.Intensity = np.reshape(self.Intensity, self.N)
+                self.Intensity[i,j] = LgBeamObj.GenerateLGBeam(pMatVal, lMatVal, beamRadVal, xx, yy)
+        #self.Intensity = np.reshape(self.Intensity, self.N)
+        print(self.Intensity)
         if self.normalize:
             R = abs(self.Intensity)
-            R = R/max(max(self.Intensity))
+            maxIntensity = max(self.Intensity.all())
+            print (maxIntensity)
+            R = R.all()/maxIntensity
             Phi = np.angle(self.Intensity)
             I = complex (0, 1)
             self.complexHologram = R * math.exp(I*Phi)
