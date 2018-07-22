@@ -7,12 +7,18 @@ function [E] = LGBeam(p, l, w_0, xx, yy)
 % p: radial order
 % l: topologial charge
 % w_0: radius as a percentage
-w_0
+counter = 1;
 [phi,r] = cart2pol(xx,yy);
 %phi=atan2(yy, xx);
+
 RhoSquareOverWSquare = r.^2 ./ w_0.^2; %optimisation since we always use the squares
+if counter == 1
+  RhoSquareOverWSquare(counter)
+  counter++
+end
 %c(p+1)=1;
 %La = LaguerreL(c, abs(l), 2*RhoSquareOverWSquare);
+p
 La = Laguerre(p, abs(l), 2*RhoSquareOverWSquare);
 Clg = sqrt((2*factorial(p)) ./ (pi * factorial(abs(l)+p))) ./ w_0;
 E = Clg .* (sqrt(2)*sqrt(RhoSquareOverWSquare)).^abs(l) .* La .* exp(-RhoSquareOverWSquare) .* exp(-1i*l*phi);
@@ -63,13 +69,13 @@ if nargin < 6
     rowToColRatio = 1;
 end
 
-grid=size(lMatrix);
+grid=size(lMatrix)
 N([1 2])=fliplr(dimensionsXY);
-points=N./grid;
+points=N./grid
 range=N/min(N)
 
-pMatrix(1:grid(1), 1:grid(2)) = pMatrix;
-beamRadiusPercent(1:grid(1), 1:grid(2)) = beamRadiusPercent; 
+pMatrix(1:grid(1), 1:grid(2)) = pMatrix
+beamRadiusPercent(1:grid(1), 1:grid(2)) = beamRadiusPercent
 x=linspace(-range(1), range(1), points(1));
 y=linspace(-range(2)/rowToColRatio, range(2)/rowToColRatio, points(2));
 [yy,xx]=meshgrid(y,x);
@@ -227,10 +233,11 @@ end
 %generates a simple lg hologram with a grating
 
 %[cols rows]
-sizeGrid = [1024 1024];
+sizeGrid = [1024 1024]
 
 l = [1]
 p = [0]
+complexAmplitude = true;
 complexAmplitude = true;
 
 gratingNumber = 50;
