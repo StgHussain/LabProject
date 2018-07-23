@@ -33,10 +33,4 @@ class LgBeam():
 
     def __init__(self):
         self.SquareRoot2 = math.sqrt(2)
-<<<<<<< HEAD
         print("lg Beam")
-=======
-        p = 0
-        l = 1
-        w = 0.12207
->>>>>>> 29eb918e0ec5abdd14b97e12360c85902bd649db
