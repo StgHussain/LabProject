@@ -78,14 +78,14 @@ pMatrix(1:grid(1), 1:grid(2)) = pMatrix
 beamRadiusPercent(1:grid(1), 1:grid(2)) = beamRadiusPercent
 x=linspace(-range(1), range(1), points(1));
 y=linspace(-range(2)/rowToColRatio, range(2)/rowToColRatio, points(2));
-[yy,xx]=meshgrid(y,x);
+[yy,xx]=meshgrid(y,x)
 
 
 %E(points(1), grid(1), points(2), grid(2)) = 0;
 E = zeros(N);
 for i=1:grid(1)
     for j=1:grid(2)
-        E(:,:,i,j)=LGBeam(pMatrix(i,j), lMatrix(i,j), beamRadiusPercent(i,j), xx, yy);% OAM
+        E(:,:,i,j)=LGBeam(pMatrix(i,j), lMatrix(i,j), beamRadiusPercent(i,j), xx, yy)% OAM
         %A(:,i,:,j)=grating(E(:,:,i,j), xx, yy, gratingNumber,
         %gratingAngleDegrees, useAmplitude); % no grating in this function
     end
@@ -233,7 +233,7 @@ end
 %generates a simple lg hologram with a grating
 
 %[cols rows]
-sizeGrid = [1024 1024]
+sizeGrid = [5 5]
 
 l = [1]
 p = [0]
