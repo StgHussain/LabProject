@@ -7,8 +7,8 @@ from Laguerre import Laguerre
 
 class LgBeam():
 
-    def GenerateLGBeam(self, p, l, w):
-        sizePoints = 5
+    def GenerateLGBeam(self, p, l, w, sizepoints):
+        sizePoints = sizepoints
         XXcords = np.linspace(-1, 1, sizePoints)
         YYcords = np.linspace(-1/1, 1/1,  sizePoints) #range/something (both need changing)
         Xcords, Ycords = np.meshgrid(XXcords, YYcords)
@@ -62,11 +62,11 @@ class LgBeam():
                 complexHologram[a][b] = ResultNew[a][b] * np.exp(imaginaryNum*Phi[a][b])
         print("complex hologram")
         #print(complexHologram)
-        self.addGrating(complexHologram, gratingAngle, gratNum)
+        self.addGrating(complexHologram, gratingAngle, gratNum, sizePoints)
 
 
-    def addGrating(self, inputHologram, gratingAngle, gratingNum):
-        sizePoints = 5
+    def addGrating(self, inputHologram, gratingAngle, gratingNum, sizes):
+        sizePoints = sizes
         print("add grating")
         XXcords = np.linspace(-self.PI, self.PI, sizePoints)
         YYcords = np.linspace(-self.PI, self.PI, sizePoints)
@@ -103,7 +103,7 @@ class LgBeam():
         print("show image")
         finalMat = [*zip(*img)]
         #print(finalMat)
-        plt.matshow(finalMat, aspect = 'auto', cmap = plt.get_cmap('greys'))
+        plt.matshow(finalMat, aspect = 'auto', cmap = plt.get_cmap('gist_gray'))
         plt.show()
     
     def LaguerreBeam(self, p, l, x):
@@ -143,6 +143,7 @@ obj = LgBeam()
 p = 1
 l = 1
 w = 25
-obj.GenerateLGBeam(p, l, w)
+grids = 5
+obj.GenerateLGBeam(p, l, w, grids)
 
 
