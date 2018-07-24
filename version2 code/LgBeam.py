@@ -141,9 +141,9 @@ class LgBeam():
 
 obj = LgBeam()
 p = 1
-l = 1
+l = 10
 w = 25
-grids = 5
+grids = 5 
 obj.GenerateLGBeam(p, l, w, grids)
 
 
