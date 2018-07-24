@@ -25,12 +25,12 @@ class LgBeam():
         print(Values)
         print("values")
 
-
-        Pi = math.pi
         factP = math.factorial(p)
         factLP = math.factorial(abs(l) + p)
-        Clg = math.sqrt((2*factP/ (Pi * factLP))) / w
-        Result = []
+        Clg = math.sqrt((2*factP/ (self.PI * factLP))) / w
+
+        n = 5 #change this to match grid sizeS
+        Result = [[0]*n for x in range(n)] #n value is the size of the result matrix i.e the grid
         for i in range (5):
             for j in range (5):
                 imagNum = complex(0,-l*phi[i][j])
@@ -38,7 +38,8 @@ class LgBeam():
                 Result[i][j] = Clg * (self.SquareRoot2 * np.power(math.sqrt(RhoSquaredOverWSquare[i][j]), abs(l))) * reqVal * np.exp(-RhoSquaredOverWSquare[i][j]) * np.exp(imagNum)
         gratingAngle = 45
         gratNum = 50
-
+        print('results')
+        print(Result)
         self.addGrating(Result, gratingAngle, gratNum)
 
 
@@ -97,9 +98,10 @@ class LgBeam():
         print("lg Beam")
 
 obj = LgBeam()
-p = 0
+p = 1
 l = 1
-w = 0.12207
+#w = 0.12207
+w = 25
 obj.GenerateLGBeam(p, l, w)
 
 
