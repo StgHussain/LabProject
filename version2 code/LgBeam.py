@@ -71,7 +71,8 @@ class LgBeam():
         #Vals = [2]
         Vals = []
         if p == 0:
-            Vals = [1] * 1024
+            Vals = [[1]*5 for __ in range(5)]
+            print (Vals)
         else:
             for m in range (p):
                 factM1 = math.factorial(p + 1)
