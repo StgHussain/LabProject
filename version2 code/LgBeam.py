@@ -44,15 +44,30 @@ class LgBeam():
 
 
     def addGrating(self, inputHologram, gratingAngle, gratingNum):
+        
         print("add grating")
-        Xcords = np.linspace(-1, 1, 5)
-        Ycords = np.linspace(-1, 1, 5)
+        XXcords = np.linspace(-self.PI, self.PI, 5)
+        YYcords = np.linspace(-self.PI, self.PI, 5)
+
+        print("xcords")
+        print(XXcords)
+        print("ycords")
+        print(YYcords)
+        print("correct co ords")
+
+        Xcords, Ycords = np.meshgrid(XXcords, YYcords)
 
         theta = (self.PI/180)* gratingAngle
         plane = math.sin(theta)*Xcords + math.cos(theta)*Ycords
+        print("plane")
+        print(plane)
         phase = np.angle(inputHologram)
+        print("phase")
+        print(phase)
 
         phaseHologram = np.mod(phase + gratingNum*plane, 2*self.PI) - self.PI
+        print("phase hologram")
+        print(phaseHologram)
         intensity = np.abs(inputHologram)
 
         phaseHologram = phaseHologram * intensity
@@ -101,7 +116,6 @@ class LgBeam():
 obj = LgBeam()
 p = 1
 l = 1
-#w = 0.12207
 w = 25
 obj.GenerateLGBeam(p, l, w)
 
