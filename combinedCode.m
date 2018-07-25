@@ -1,5 +1,6 @@
 function combinedCode
-  
+
+totalTimeStart = tic();
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [E] = LGBeam(p, l, w_0, xx, yy)
@@ -7,18 +8,14 @@ function [E] = LGBeam(p, l, w_0, xx, yy)
 % p: radial order
 % l: topologial charge
 % w_0: radius as a percentage
+LgBeamTimeStart = tic();
 counter = 1;
 [phi,r] = cart2pol(xx,yy);
 %phi=atan2(yy, xx);
 
 RhoSquareOverWSquare = r.^2 ./ w_0.^2; %optimisation since we always use the squares
-if counter == 1
-  RhoSquareOverWSquare(counter)
-  counter++
-end
 %c(p+1)=1;
 %La = LaguerreL(c, abs(l), 2*RhoSquareOverWSquare);
-p
 La = Laguerre(p, abs(l), 2*RhoSquareOverWSquare);
 Clg = sqrt((2*factorial(p)) ./ (pi * factorial(abs(l)+p))) ./ w_0;
 E = Clg .* (sqrt(2)*sqrt(RhoSquareOverWSquare)).^abs(l) .* La .* exp(-RhoSquareOverWSquare) .* exp(-1i*l*phi);
@@ -28,6 +25,7 @@ E = Clg .* (sqrt(2)*sqrt(RhoSquareOverWSquare)).^abs(l) .* La .* exp(-RhoSquareO
 %radial_function = rad_term_1.*rad_term_2;
 %phase = exp(1i*phi*l);
 %slm_mode = radial_function.*phase;
+LgBeamTimeEnd = toc();
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -58,9 +56,6 @@ function [complexHologram, normalisationFactor] = LGHologram(dimensionsXY, pMatr
 % normalisation factor that was used to normalise the beam amplitude to
 % [0,1].
 %
-% Example: 
-% mat=LGHologram([512 512],[0],[1],0.5); ComplexFigure(mat);
-% mat=LGHologram([512 512],[0],[1],CalculateBeamRadius(512,8,2)); ComplexFigure(mat);
 
 if nargin < 5
     normaliseZeroOne = true;
@@ -78,18 +73,20 @@ pMatrix(1:grid(1), 1:grid(2)) = pMatrix
 beamRadiusPercent(1:grid(1), 1:grid(2)) = beamRadiusPercent
 x=linspace(-range(1), range(1), points(1));
 y=linspace(-range(2)/rowToColRatio, range(2)/rowToColRatio, points(2));
-[yy,xx]=meshgrid(y,x)
+[yy,xx]=meshgrid(y,x);
 
 
 %E(points(1), grid(1), points(2), grid(2)) = 0;
+tic
 E = zeros(N);
 for i=1:grid(1)
     for j=1:grid(2)
-        E(:,:,i,j)=LGBeam(pMatrix(i,j), lMatrix(i,j), beamRadiusPercent(i,j), xx, yy)% OAM
+        E(:,:,i,j)=LGBeam(pMatrix(i,j), lMatrix(i,j), beamRadiusPercent(i,j), xx, yy);% OAM
         %A(:,i,:,j)=grating(E(:,:,i,j), xx, yy, gratingNumber,
         %gratingAngleDegrees, useAmplitude); % no grating in this function
     end
 end
+toc
 %A=reshape(A, N);
 E=reshape(E, N);
 %max(max(E))
@@ -175,6 +172,7 @@ end
 function y = Laguerre(p,l,x)
 %%This file generates the Laguerre functions stired in the variable "y" The
 %%inputs are: the indices "p","l" and the vector "x".
+LaguerreTimeStart = tic();
 y=zeros(p+1,1);
 sizeY = size(y);
 if p==0
@@ -185,6 +183,7 @@ for m=0:p
 end
 end
 y = polyval(y,x);
+LaguerreTimeEnd = toc();
 end
 
 
@@ -197,7 +196,7 @@ function [ img ] = ShowImage( img, fs, map, filename )
 %   filename : The path and filename (can be relative). If not specified
 %   then the image is not saved. .png is automatically appended.
 
-dr = [0 255]
+dr = [0 255];
 
 if nargin < 2
     fs = 0;
@@ -233,10 +232,10 @@ end
 %generates a simple lg hologram with a grating
 
 %[cols rows]
-sizeGrid = [5 5]
+sizeGrid = [1024 1024]
 
-l = [1]
-p = [0]
+l = [10];
+p = [0];
 complexAmplitude = true;
 complexAmplitude = true;
 
@@ -252,5 +251,6 @@ mat = LGHologram(sizeGrid,p,l,CalculateBeamRadius(sizeGrid(2),8,beamRadius));
 gratingMat = AddGrating(mat,gratingNumber,gratingAngle,complexAmplitude);
 
 ShowImage(gratingMat);
-
+totalTimeEnd = toc(totalTimeStart);
+return totalTimeEnd
 end
