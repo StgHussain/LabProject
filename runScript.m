@@ -1,11 +1,12 @@
-testSize = 100
+testSize = 1000;
 
-runTimes = [testSize]
+runTimes = [testSize];
 
-for in = 1:testSize
-  runTimes(in) = combinedCode(0, 1, 1024)
-endfor
+#for in = 1:testSize
+#  runTimes(in) = combinedCode(0, 1, 1024);
+#endfor
 
-for in = 1:testSize
-  
-endfor
+fprintf("done")
+fileID = fopen('matlab execution results.csv', w);
+xlswrite('matlab execution results.csv', runTimes); 
+

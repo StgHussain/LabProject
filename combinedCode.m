@@ -185,9 +185,9 @@ end
 end
 y = polyval(y,x);
 LaguerreTimeEnd = toc();
-time1 = sprintf('%.4f', LaguerreTimeEnd)
-timeName = "Laguerre time: "
-time1 = strcat(timeName, time1)
+time1 = sprintf('%.4f', LaguerreTimeEnd);
+timeName = "Laguerre time: ";
+time1 = strcat(timeName, time1);
 #fprintf(time1);
 end
 
@@ -237,7 +237,7 @@ end
 %generates a simple lg hologram with a grating
 
 %[cols rows]
-sizeGrid = [gridSIZE gridSIZE]
+sizeGrid = [gridSIZE gridSIZE];
 
 l = [L];
 p = [P];
@@ -258,8 +258,8 @@ gratingMat = AddGrating(mat,gratingNumber,gratingAngle,complexAmplitude);
 #ShowImage(gratingMat);
 
 totalTimeEnd = toc(totalTimeStart);
-time1 = sprintf('%.4f', totalTimeEnd)
+time1 = sprintf('%.4f', totalTimeEnd);
 timeName = "Total time: ";
-time1 = strcat(timeName, time1)
+time1 = strcat(timeName, time1);
 #fprintf(time1);
 end
