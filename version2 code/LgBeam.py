@@ -2,6 +2,7 @@ import numpy as np
 import scipy as scipy
 import math
 import matplotlib.pyplot as plt
+import time
 from matplotlib import cm
 from Laguerre import Laguerre 
 
@@ -14,16 +15,16 @@ class LgBeam():
         Xcords, Ycords = np.meshgrid(XXcords, YYcords)
         #print (Xcords)
         #print (Ycords)
-        print("co ordinates done")
+        #print("co ordinates done")
 
         [rho, phi] = self.cart2pol(Xcords, Ycords)
         RhoSquaredOverWSquare = (rho*rho)/(w*w)
         #print(RhoSquaredOverWSquare)
-        print("next")
+        #print("next")
         
         Values = self.LaguerreBeam(p,l, 2*RhoSquaredOverWSquare)
         #print(Values)
-        print("values")
+        #print("values")
 
         factP = math.factorial(p)
         factLP = math.factorial(abs(l) + p)
@@ -38,7 +39,7 @@ class LgBeam():
                 Result[i][j] = Clg * (self.SquareRoot2 * np.power(math.sqrt(RhoSquaredOverWSquare[i][j]), abs(l))) * reqVal * np.exp(-RhoSquaredOverWSquare[i][j]) * np.exp(imagNum)
         gratingAngle = 45
         gratNum = 50
-        print('results')
+        #print('results')
         #print(Result)
 
         ResultNew = [np.abs(number) for number in Result]
@@ -50,57 +51,57 @@ class LgBeam():
             #print(maxVal)
         #print(maxResult)
         ResultNew = ResultNew/maxResult
-        print("result absolute")
+        #print("result absolute")
         #print(ResultNew)
         Phi = np.angle(Result)
-        print("phi values")
+        #print("phi values")
         #print(Phi)
         imaginaryNum = complex(0, 1)
         complexHologram = [[0]*n for x in range(n)]
         for a in range(n):
             for b in range(n):
                 complexHologram[a][b] = ResultNew[a][b] * np.exp(imaginaryNum*Phi[a][b])
-        print("complex hologram")
+        #print("complex hologram")
         #print(complexHologram)
         self.addGrating(complexHologram, gratingAngle, gratNum, sizePoints)
 
 
     def addGrating(self, inputHologram, gratingAngle, gratingNum, sizes):
         sizePoints = sizes
-        print("add grating")
+        #print("add grating")
         XXcords = np.linspace(-self.PI, self.PI, sizePoints)
         YYcords = np.linspace(-self.PI, self.PI, sizePoints)
 
-        print("input hologram")
+        #print("input hologram")
         #print(inputHologram)
 
-        print("xcords")
+        #print("xcords")
         #print(XXcords)
-        print("ycords")
+        #print("ycords")
         #print(YYcords)
-        print("correct co ords")
+        #print("correct co ords")
 
         Xcords, Ycords = np.meshgrid(XXcords, YYcords)
 
         theta = (self.PI/180)* gratingAngle
         plane = math.sin(theta)*Xcords + math.cos(theta)*Ycords
-        print("plane")
+        #print("plane")
         #print(plane)
         phase = np.angle(inputHologram)
-        print("phase")
+        #print("phase")
         #print(phase)
 
         phaseHologram = np.mod(phase + gratingNum*plane, 2*self.PI) - self.PI
-        print("phase hologram")
+        #print("phase hologram")
         #print(phaseHologram)
         intensity = np.abs(inputHologram)
 
         phaseHologram = phaseHologram * intensity
         phaseHologram = (phaseHologram - self.PI)/(-2*self.PI)
-        self.showImg(phaseHologram)
+        #self.showImg(phaseHologram)
 
     def showImg(self, img):
-        print("show image")
+        #print("show image")
         finalMat = [*zip(*img)]
         #print(finalMat)
         plt.matshow(finalMat, aspect = 'auto', cmap = plt.get_cmap('gist_gray'))
@@ -108,12 +109,12 @@ class LgBeam():
     
     def LaguerreBeam(self, p, l, x):
         #self.y = np.array(p + 1, 1)
-        print ("laguerre")
+        #print ("laguerre")
         #Vals = [2]
         Vals = []
         if p == 0:
             Vals = [[1]*5 for __ in range(5)]
-            print (Vals)
+            #print (Vals)
         else:
             for m in range (p):
                 factM1 = math.factorial(p + 1)
@@ -125,7 +126,7 @@ class LgBeam():
                 Vals.append(numerator/denom)
         #polyVal if needed
         PolyCoeff = np.polyval(Vals, x)
-        print("poly coeff")
+        #print("poly coeff")
         #print(PolyCoeff)
         return PolyCoeff
 
@@ -137,13 +138,17 @@ class LgBeam():
     def __init__(self):
         self.SquareRoot2 = math.sqrt(2)
         self.PI= math.pi
-        print("lg Beam")
+        #print("lg Beam")
 
-obj = LgBeam()
-p = 1
-l = 10
-w = 25
-grids = 5 
-obj.GenerateLGBeam(p, l, w, grids)
-
+    def start(self, P, L, W, grid):
+        obj = LgBeam()
+        p = P
+        l = L
+        w = 0.12077
+        grids = grid
+        t0 = time.time()    
+        obj.GenerateLGBeam(p, l, w, grids)
+        t1 = time.time()
+        totalTime = t1-t0
+        return totalTime
 
