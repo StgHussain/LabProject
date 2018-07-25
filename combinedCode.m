@@ -252,5 +252,5 @@ gratingMat = AddGrating(mat,gratingNumber,gratingAngle,complexAmplitude);
 
 ShowImage(gratingMat);
 totalTimeEnd = toc(totalTimeStart);
-return totalTimeEnd
+#return totalTimeEnd
 end
