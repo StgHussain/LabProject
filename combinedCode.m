@@ -1,4 +1,4 @@
-function combinedCode
+function [totalTimeEnd] = combinedCode(P, L, gridSIZE)
 
 totalTimeStart = tic();
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -26,6 +26,10 @@ E = Clg .* (sqrt(2)*sqrt(RhoSquareOverWSquare)).^abs(l) .* La .* exp(-RhoSquareO
 %phase = exp(1i*phi*l);
 %slm_mode = radial_function.*phase;
 LgBeamTimeEnd = toc();
+time1 = sprintf('%.4f', LgBeamTimeEnd);
+timeName = "LgBeam time: ";
+time1 = strcat(timeName, time1);
+#fprintf(time1);
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -64,20 +68,19 @@ if nargin < 6
     rowToColRatio = 1;
 end
 
-grid=size(lMatrix)
+grid=size(lMatrix);
 N([1 2])=fliplr(dimensionsXY);
-points=N./grid
-range=N/min(N)
+points=N./grid;
+range=N/min(N);
 
-pMatrix(1:grid(1), 1:grid(2)) = pMatrix
-beamRadiusPercent(1:grid(1), 1:grid(2)) = beamRadiusPercent
+pMatrix(1:grid(1), 1:grid(2)) = pMatrix;
+beamRadiusPercent(1:grid(1), 1:grid(2)) = beamRadiusPercent;
 x=linspace(-range(1), range(1), points(1));
 y=linspace(-range(2)/rowToColRatio, range(2)/rowToColRatio, points(2));
 [yy,xx]=meshgrid(y,x);
 
 
 %E(points(1), grid(1), points(2), grid(2)) = 0;
-tic
 E = zeros(N);
 for i=1:grid(1)
     for j=1:grid(2)
@@ -102,7 +105,6 @@ if normaliseZeroOne == true
     normalisationFactor = 1 / sum(sum(conj(complexHologram).*complexHologram));
     %warning('Remember to renormalise the measurements to maintain orthonormality! See: Flamm2013.');
 else
-    fprintf('here')
     complexHologram = E;
     normalisationFactor = 1;
 end
@@ -163,7 +165,7 @@ function [ beamRadiusPercent ] = CalculateBeamRadius( dimensionPixels, pixelSize
 %CALCULATEBEAMRADIUS Converts beamRadius in mm to a percentage of the
 %specified dimensionPixels and the pixel size
 
-beamRadiusPercent = 1/((dimensionPixels * pixelSize_um * 1e-6)/(beamRadius_mm*1e-3))
+beamRadiusPercent = 1/((dimensionPixels * pixelSize_um * 1e-6)/(beamRadius_mm*1e-3));
 
 end
 
@@ -174,7 +176,6 @@ function y = Laguerre(p,l,x)
 %%inputs are: the indices "p","l" and the vector "x".
 LaguerreTimeStart = tic();
 y=zeros(p+1,1);
-sizeY = size(y);
 if p==0
     y=1;
 else
@@ -184,6 +185,10 @@ end
 end
 y = polyval(y,x);
 LaguerreTimeEnd = toc();
+time1 = sprintf('%.4f', LaguerreTimeEnd)
+timeName = "Laguerre time: "
+time1 = strcat(timeName, time1)
+#fprintf(time1);
 end
 
 
@@ -232,10 +237,10 @@ end
 %generates a simple lg hologram with a grating
 
 %[cols rows]
-sizeGrid = [1024 1024]
+sizeGrid = [gridSIZE gridSIZE]
 
-l = [10];
-p = [0];
+l = [L];
+p = [P];
 complexAmplitude = true;
 complexAmplitude = true;
 
@@ -250,7 +255,11 @@ mat = LGHologram(sizeGrid,p,l,CalculateBeamRadius(sizeGrid(2),8,beamRadius));
 
 gratingMat = AddGrating(mat,gratingNumber,gratingAngle,complexAmplitude);
 
-ShowImage(gratingMat);
+#ShowImage(gratingMat);
+
 totalTimeEnd = toc(totalTimeStart);
-#return totalTimeEnd
+time1 = sprintf('%.4f', totalTimeEnd)
+timeName = "Total time: ";
+time1 = strcat(timeName, time1)
+#fprintf(time1);
 end
