@@ -22,7 +22,7 @@ class LgBeam():
         #print(RhoSquaredOverWSquare)
         #print("next")
         
-        Values = self.LaguerreBeam(p,l, 2*RhoSquaredOverWSquare)
+        Values = self.LaguerreBeam(p,l, 2*RhoSquaredOverWSquare, sizePoints)
         #print(Values)
         #print("values")
 
@@ -107,13 +107,13 @@ class LgBeam():
         plt.matshow(finalMat, aspect = 'auto', cmap = plt.get_cmap('gist_gray'))
         plt.show()
     
-    def LaguerreBeam(self, p, l, x):
+    def LaguerreBeam(self, p, l, x, sizeGrid):
         #self.y = np.array(p + 1, 1)
         #print ("laguerre")
         #Vals = [2]
         Vals = []
         if p == 0:
-            Vals = [[1]*5 for __ in range(5)]
+            Vals = [[1]*sizeGrid for __ in range(5)]
             #print (Vals)
         else:
             for m in range (p):
