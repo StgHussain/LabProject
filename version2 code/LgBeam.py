@@ -35,9 +35,8 @@ class LgBeam(threading.Thread):
         timeResStart = time.time()
 
         n = sizePoints #change this to match grid sizeS
-        Result = [[0]*n for x in range(n)] #n value is the size of the result matrix i.e the grid
         t3 = time.time()
-        #Result = np.zeros((n, n))
+        Result = np.zeros((n, n))
         t4 = time.time()
         print("initial time")
         print(t4-t3)
@@ -54,18 +53,10 @@ class LgBeam(threading.Thread):
         totalRes = timeResEnd - timeResStart 
         print("total loop time")
         print(totalRes)
-        #print('results')
-        #print(Result)
 
         ResultNew = [np.abs(number) for number in Result]
         maxResult = np.amax(ResultNew)
-        #maxResult = 0
-        #for i in range(n):
-        #    maxVal = max(ResultNew[i])
-        #    if maxVal > maxResult:
-        #        maxResult = maxVal
-            #print(maxVal)
-        #print(maxResult)
+
         ResultNew = ResultNew/maxResult
         Phi = np.angle(Result)
         imaginaryNum = complex(0, 1)
@@ -78,39 +69,21 @@ class LgBeam(threading.Thread):
         maxTime = t2 - t1
         print("time to complex value")
         print(maxTime)
-        #print("complex hologram")
-        #print(complexHologram)
         self.addGrating(complexHologram, gratingAngle, gratNum, sizePoints)
 
 
     def addGrating(self, inputHologram, gratingAngle, gratingNum, sizes):
         sizePoints = sizes
-        #print("add grating")
         XXcords = np.linspace(-self.PI, self.PI, sizePoints)
         YYcords = np.linspace(-self.PI, self.PI, sizePoints)
-
-        #print("input hologram")
-        #print(inputHologram)
-
-        #print("xcords")
-        #print(XXcords)
-        #print("ycords")
-        #print(YYcords)
-        #print("correct co ords")
 
         Xcords, Ycords = np.meshgrid(XXcords, YYcords)
 
         theta = (self.PI/180)* gratingAngle
         plane = math.sin(theta)*Xcords + math.cos(theta)*Ycords
-        #print("plane")
-        #print(plane)
         phase = np.angle(inputHologram)
-        #print("phase")
-        #print(phase)
 
         phaseHologram = np.mod(phase + gratingNum*plane, 2*self.PI) - self.PI
-        #print("phase hologram")
-        #print(phaseHologram)
         intensity = np.abs(inputHologram)
 
         phaseHologram = phaseHologram * intensity
@@ -118,16 +91,11 @@ class LgBeam(threading.Thread):
         self.showImg(phaseHologram)
 
     def showImg(self, img):
-        #print("show image")
         finalMat = [*zip(*img)]
-        #print(finalMat)
         plt.matshow(finalMat, aspect = 'auto', cmap = plt.get_cmap('gist_gray'))
         plt.show()
     
     def LaguerreBeam(self, p, l, x, sizeGrid):
-        #self.y = np.array(p + 1, 1)
-        #print ("laguerre")
-        #Vals = [2]
         Vals = []
         t1 = time.time()
         if p == 0:
@@ -148,8 +116,6 @@ class LgBeam(threading.Thread):
         lag = t2 -t1
         print("laguerre time")
         print(lag)
-        #print("poly coeff")
-        #print(PolyCoeff)
         return PolyCoeff
 
     def cart2pol(self, x, y):
