@@ -15,18 +15,11 @@ class LgBeam(threading.Thread):
         XXcords = np.linspace(-1, 1, sizePoints)
         YYcords = np.linspace(-1/1, 1/1,  sizePoints) #range/something (both need changing)
         Xcords, Ycords = np.meshgrid(XXcords, YYcords)
-        #print (Xcords)
-        #print (Ycords)
-        #print("co ordinates done")
 
         [rho, phi] = self.cart2pol(Xcords, Ycords)
         RhoSquaredOverWSquare = (rho*rho)/(w*w)
-        #print(RhoSquaredOverWSquare)
-        #print("next")
         
         Values = self.LaguerreBeam(p,l, 2*RhoSquaredOverWSquare, sizePoints)
-        #print(Values)
-        #print("values")
 
         factP = math.factorial(p)
         factLP = math.factorial(abs(l) + p)
