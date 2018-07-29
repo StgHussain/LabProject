@@ -5,11 +5,13 @@ import pandas as pd
 from pandas import ExcelWriter
 from pandas import ExcelFile
 import numpy as np
+import threading
+
 
 Lg = LgBeam()
-testSize = 100
+testSize = 1
 execTimes = [0]*testSize
-p = 1
+p = 0
 l = 1
 grid = 1024
 w = 0.12207
@@ -17,6 +19,7 @@ w = 0.12207
 
 for m in range(testSize):
     execTimes[m] = Lg.start(p, l, w, grid)
+
     print(m)
 
 #df = pd.DataFrame(execTimes)

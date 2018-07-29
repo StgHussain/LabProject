@@ -5,8 +5,10 @@ import matplotlib.pyplot as plt
 import time
 from matplotlib import cm
 from Laguerre import Laguerre 
+import threading
+from multiprocessing import Pool 
 
-class LgBeam():
+class LgBeam(threading.Thread):
 
     def GenerateLGBeam(self, p, l, w, sizepoints):
         sizePoints = sizepoints
@@ -30,8 +32,16 @@ class LgBeam():
         factLP = math.factorial(abs(l) + p)
         Clg = math.sqrt((2*factP/ (self.PI * factLP))) / w
 
+        timeResStart = time.time()
+
         n = sizePoints #change this to match grid sizeS
         Result = [[0]*n for x in range(n)] #n value is the size of the result matrix i.e the grid
+        t3 = time.time()
+        #Result = np.zeros((n, n))
+        t4 = time.time()
+        print("initial time")
+        print(t4-t3)
+
         for i in range (n):
             for j in range (n):
                 imagNum = complex(0,-l*phi[i][j])
@@ -39,28 +49,35 @@ class LgBeam():
                 Result[i][j] = Clg * (self.SquareRoot2 * np.power(math.sqrt(RhoSquaredOverWSquare[i][j]), abs(l))) * reqVal * np.exp(-RhoSquaredOverWSquare[i][j]) * np.exp(imagNum)
         gratingAngle = 45
         gratNum = 50
+
+        timeResEnd = time.time()
+        totalRes = timeResEnd - timeResStart 
+        print("total loop time")
+        print(totalRes)
         #print('results')
         #print(Result)
 
         ResultNew = [np.abs(number) for number in Result]
-        maxResult = 0
-        for i in range(n):
-            maxVal = max(ResultNew[i])
-            if maxVal > maxResult:
-                maxResult = maxVal
+        maxResult = np.amax(ResultNew)
+        #maxResult = 0
+        #for i in range(n):
+        #    maxVal = max(ResultNew[i])
+        #    if maxVal > maxResult:
+        #        maxResult = maxVal
             #print(maxVal)
         #print(maxResult)
         ResultNew = ResultNew/maxResult
-        #print("result absolute")
-        #print(ResultNew)
         Phi = np.angle(Result)
-        #print("phi values")
-        #print(Phi)
         imaginaryNum = complex(0, 1)
-        complexHologram = [[0]*n for x in range(n)]
+        complexHologram = np.zeros((1024, 1024))
+        t1 = time.time()
         for a in range(n):
             for b in range(n):
                 complexHologram[a][b] = ResultNew[a][b] * np.exp(imaginaryNum*Phi[a][b])
+        t2 = time.time()
+        maxTime = t2 - t1
+        print("time to complex value")
+        print(maxTime)
         #print("complex hologram")
         #print(complexHologram)
         self.addGrating(complexHologram, gratingAngle, gratNum, sizePoints)
@@ -98,7 +115,7 @@ class LgBeam():
 
         phaseHologram = phaseHologram * intensity
         phaseHologram = (phaseHologram - self.PI)/(-2*self.PI)
-        #self.showImg(phaseHologram)
+        self.showImg(phaseHologram)
 
     def showImg(self, img):
         #print("show image")
@@ -112,6 +129,7 @@ class LgBeam():
         #print ("laguerre")
         #Vals = [2]
         Vals = []
+        t1 = time.time()
         if p == 0:
             Vals = [[1]*sizeGrid for __ in range(5)]
             #print (Vals)
@@ -126,6 +144,10 @@ class LgBeam():
                 Vals.append(numerator/denom)
         #polyVal if needed
         PolyCoeff = np.polyval(Vals, x)
+        t2 = time.time()
+        lag = t2 -t1
+        print("laguerre time")
+        print(lag)
         #print("poly coeff")
         #print(PolyCoeff)
         return PolyCoeff
