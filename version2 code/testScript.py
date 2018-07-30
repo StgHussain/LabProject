@@ -13,8 +13,8 @@ testSize = 1
 execTimes = [0]*testSize
 p = 0
 l = 1
-grid = 1024
-w = 0.12207
+grid = 1000
+w = 0.12077
 
 
 for m in range(testSize):
@@ -23,7 +23,7 @@ for m in range(testSize):
     print(m)
 
 #df = pd.DataFrame(execTimes)
-#writer = ExcelWriter('python results.xlsx')
+#writer = ExcelWriter('python results v2.xlsx')
 #df.to_excel(writer,'Sheet1',index=False)
 #writer.save()
 
