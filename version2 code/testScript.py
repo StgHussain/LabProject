@@ -11,16 +11,22 @@ import threading
 Lg = LgBeam()
 testSize = 1
 execTimes = [0]*testSize
-p = 0
+p = 1
 l = 1
-grid = 1000
+grid = 200
 w = 0.12077
+
+#test1 = np.array((1000, 1000))
+#test2 = np.array((1000, 1000))
+
+#ans = np.multiply(test1, test2)
+#print("done")
 
 
 for m in range(testSize):
     execTimes[m] = Lg.start(p, l, w, grid)
 
-    print(m)
+#    print(m)
 
 #df = pd.DataFrame(execTimes)
 #writer = ExcelWriter('python results v2.xlsx')

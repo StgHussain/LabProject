@@ -21,8 +21,9 @@ class LgBeam(threading.Thread):
 
         RhoSquaredOverWSquare = np.zeros((n, n))
         RhoSquaredOverWSquare = (rho*rho)/(w*w)
-        Values = np.zeros((n,n))
-        Values = self.LaguerreBeam(p,l, 2*RhoSquaredOverWSquare, sizePoints)
+        Values = self.LaguerreBeam(p, l, 2*RhoSquaredOverWSquare, sizePoints)
+        print(" yooll")
+        print(Values)
 
         factP = math.factorial(p)
         factLP = math.factorial(abs(l) + p)
@@ -32,8 +33,12 @@ class LgBeam(threading.Thread):
         imgNum = np.multiply(phi, complex(0, -l))
 
        #Result calculation 
-
-        mult1 = np.multiply(np.power(self.SquareRoot2*np.sqrt(RhoSquaredOverWSquare), abs(l)), Values)
+        RhoSqrt = np.sqrt(RhoSquaredOverWSquare) * self.SquareRoot2
+        RhoSqrt = np.power(RhoSqrt, abs(l))
+        print(RhoSqrt)
+        mult1 = np.multiply(RhoSqrt, Values)
+        print(" yooll")
+        print(mult1)
         mult2 = np.multiply(np.exp(-RhoSquaredOverWSquare), np.exp(imgNum))
         Res2 = np.multiply(mult1, mult2)
         Res2 = np.multiply(Res2, Clg)
@@ -53,15 +58,13 @@ class LgBeam(threading.Thread):
         Phi = np.multiply(Phi, imaginaryNum)
         Phi = np.exp(Phi)
         complexHologram = np.zeros((n, n), dtype=complex)
-        t1 = time.time()
-
-        #complexHologram = np.multiply(ResultNew, Phi)
+        complexHologram = np.multiply(ResultNew, Phi)
         #for a in range(n):
         #    for b in range(n):
         #        complexHologram[a][b] = ResultNew[a][b] * np.exp(imaginaryNum*Phi[a][b])
         #print("complex 2")
         #print(complexHologram)
-        #self.addGrating(complexHologram, gratingAngle, gratNum, sizePoints)
+        self.addGrating(complexHologram, gratingAngle, gratNum, sizePoints)
 
 
     def addGrating(self, inputHologram, gratingAngle, gratingNum, sizes):
@@ -88,10 +91,10 @@ class LgBeam(threading.Thread):
         plt.show()
     
     def LaguerreBeam(self, p, l, x, sizeGrid):
-        Vals = []
+        Vals = np.zeros(sizeGrid)
         if p == 0:
-            Vals = [[1]*sizeGrid for __ in range(sizeGrid)]
-            #print (Vals)
+            Vals = Vals + 1
+            print (Vals)
         else:
             for m in range (p):
                 factM1 = math.factorial(p + 1)
@@ -103,6 +106,8 @@ class LgBeam(threading.Thread):
                 Vals.append(numerator/denom)
         #polyVal if needed
         PolyCoeff = np.polyval(Vals, x)
+        print("polcoeff")
+        print(PolyCoeff)
         return PolyCoeff
 
     def cart2pol(self, x, y):
