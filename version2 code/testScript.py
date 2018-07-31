@@ -11,9 +11,9 @@ import threading
 Lg = LgBeam()
 testSize = 1
 execTimes = [0]*testSize
-p = 1
-l = 1
-grid = 200
+p = 0
+l = 5
+grid = 1024
 w = 0.12077
 
 #test1 = np.array((1000, 1000))
