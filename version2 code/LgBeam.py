@@ -7,7 +7,7 @@ from matplotlib import cm
 from Laguerre import Laguerre 
 
 
-class LgBeam(threading.Thread):
+class LgBeam():
 
     def GenerateLGBeam(self, p, l, w, sizepoints):
         sizePoints = sizepoints
