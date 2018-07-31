@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import time
 from matplotlib import cm
 from Laguerre import Laguerre 
+from numba import jit
 
 
 class LgBeam():
@@ -32,16 +33,16 @@ class LgBeam():
         time1 = time.time()
        #Result calculation 
         RhoSqrt = np.sqrt(RhoSquaredOverWSquare) * self.SquareRoot2
-        RhoSqrt = np.power(RhoSqrt, abs(l))
-        mult1 = np.multiply(RhoSqrt, Values)
+        #RhoSqrt = np.power(RhoSqrt, abs(l))
+        mult1 = np.multiply(np.power(RhoSqrt, abs(l)), Values)
         mult2 = np.multiply(np.exp(-RhoSquaredOverWSquare), np.exp(imgNum))
         Res2 = np.multiply(mult1, mult2)
         Res2 = np.multiply(Res2, Clg)
         Result = Res2
         #Results calculated 
         time2 = time.time()
-        print("time for results")
-        print(time2-time1)
+        #print("time for results")
+        #print(time2-time1)
 
         gratingAngle = 45
         gratNum = 50
@@ -58,8 +59,8 @@ class LgBeam():
         complexHologram = np.zeros((n, n), dtype=complex)
         complexHologram = np.multiply(ResultNew, Phi)
         time4 = time.time()
-        print("complex hologram time")
-        print(time4 - time3)
+        #print("complex hologram time")
+        #print(time4 - time3)
         #for a in range(n):
         #    for b in range(n):
         #        complexHologram[a][b] = ResultNew[a][b] * np.exp(imaginaryNum*Phi[a][b])
@@ -67,7 +68,7 @@ class LgBeam():
         #print(complexHologram)
         self.addGrating(complexHologram, gratingAngle, gratNum, sizePoints)
 
-
+    
     def addGrating(self, inputHologram, gratingAngle, gratingNum, sizes):
         timeS = time.time()
         sizePoints = sizes
@@ -86,8 +87,8 @@ class LgBeam():
         phaseHologram = phaseHologram * intensity
         phaseHologram = (phaseHologram - self.PI)/(-2*self.PI)
         timeE = time.time()
-        print("grating time")
-        print(timeE - timeS)
+        #print("grating time")
+        #print(timeE - timeS)
         self.showImg(phaseHologram)
 
     def showImg(self, img):
@@ -118,8 +119,8 @@ class LgBeam():
         r = np.sqrt(x**2 + y**2)
         Angle = np.arctan2(y, x)
         time2 = time.time()
-        print("time cart to polar")
-        print(time2 - time1)
+        #print("time cart to polar")
+        #print(time2 - time1)
         return(r, Angle)
 
     def __init__(self):
