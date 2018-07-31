@@ -30,7 +30,6 @@ class LgBeam():
         Result = np.zeros((n, n), dtype=complex)
         imgNum = np.multiply(phi, complex(0, -l))
 
-        time1 = time.time()
        #Result calculation 
         RhoSqrt = np.sqrt(RhoSquaredOverWSquare) * self.SquareRoot2
         #RhoSqrt = np.power(RhoSqrt, abs(l))
@@ -40,9 +39,6 @@ class LgBeam():
         Res2 = np.multiply(Res2, Clg)
         Result = Res2
         #Results calculated 
-        time2 = time.time()
-        #print("time for results")
-        #print(time2-time1)
 
         gratingAngle = 45
         gratNum = 50
@@ -51,21 +47,12 @@ class LgBeam():
         maxResult = np.amax(ResultNew)
         ResultNew = ResultNew/maxResult
 
-        time3 = time.time()
         imaginaryNum = complex(0, 1)
         Phi = np.angle(Result)
         Phi = np.multiply(Phi, imaginaryNum)
         Phi = np.exp(Phi)
         complexHologram = np.zeros((n, n), dtype=complex)
         complexHologram = np.multiply(ResultNew, Phi)
-        time4 = time.time()
-        #print("complex hologram time")
-        #print(time4 - time3)
-        #for a in range(n):
-        #    for b in range(n):
-        #        complexHologram[a][b] = ResultNew[a][b] * np.exp(imaginaryNum*Phi[a][b])
-        #print("complex 2")
-        #print(complexHologram)
         self.addGrating(complexHologram, gratingAngle, gratNum, sizePoints)
 
     
