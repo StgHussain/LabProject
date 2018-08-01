@@ -12,7 +12,7 @@ class testScript():
     def __init__(self):
         testSize = 1
         Lg = LgBeam()
-        testSize = 100
+        testSize = 1
         p = 0
         l = 5
         grid = 1024
