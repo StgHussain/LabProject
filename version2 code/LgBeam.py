@@ -1,7 +1,7 @@
 import numpy as np
 import math
-import matplotlib.pyplot as plt
 import time
+import matplotlib.pyplot as plt
 
 
 class LgBeam():
@@ -28,8 +28,8 @@ class LgBeam():
 
        #Result calculation 
         RhoSqrt = np.sqrt(RhoSquaredOverWSquare) * self.SquareRoot2
-        #RhoSqrt = np.power(RhoSqrt, abs(l))
-        mult1 = np.multiply(np.power(RhoSqrt, abs(l)), Values)
+        RhoSqrt = np.power(RhoSqrt, abs(l))
+        mult1 = np.multiply(RhoSqrt, Values)
         mult2 = np.multiply(np.exp(-RhoSquaredOverWSquare), np.exp(imgNum))
         Res2 = np.multiply(mult1, mult2)
         Res2 = np.multiply(Res2, Clg)
@@ -50,10 +50,8 @@ class LgBeam():
         complexHologram = np.zeros((n, n), dtype=complex)
         complexHologram = np.multiply(ResultNew, Phi)
         self.addGrating(complexHologram, gratingAngle, gratNum, sizePoints)
-
     
     def addGrating(self, inputHologram, gratingAngle, gratingNum, sizes):
-        timeS = time.time()
         sizePoints = sizes
         XXcords = np.linspace(-self.PI, self.PI, sizePoints)
         YYcords = np.linspace(-self.PI, self.PI, sizePoints)
@@ -69,15 +67,12 @@ class LgBeam():
 
         phaseHologram = phaseHologram * intensity
         phaseHologram = (phaseHologram - self.PI)/(-2*self.PI)
-        timeE = time.time()
-        #print("grating time")
-        #print(timeE - timeS)
         self.showImg(phaseHologram)
 
     def showImg(self, img):
         finalMat = [*zip(*img)]
         plt.matshow(finalMat, aspect = 'auto', cmap = plt.get_cmap('gist_gray'))
-        #plt.show()
+        plt.show()
     
     def LaguerreBeam(self, p, l, x, sizeGrid):
         Vals = np.zeros((p+1, 1))
@@ -98,30 +93,19 @@ class LgBeam():
         return PolyCoeff
 
     def cart2pol(self, x, y):
-        time1 = time.time()
         r = np.sqrt(x**2 + y**2)
         Angle = np.arctan2(y, x)
-        time2 = time.time()
-        #print("time cart to polar")
-        #print(time2 - time1)
         return(r, Angle)
 
     def __init__(self):
         self.SquareRoot2 = math.sqrt(2)
         self.PI= math.pi
         
-
     def start(self, P, L, W, grid):
         obj = LgBeam()
         p = P
         l = L
         w = W
         grids = grid
-        t0 = time.time()    
         obj.GenerateLGBeam(p, l, w, grids)
-        t1 = time.time()
-        totalTime = t1-t0
-        print("total time:")
-        print(totalTime)
-        return totalTime
 
