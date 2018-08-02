@@ -4,6 +4,7 @@ import time
 import matplotlib.pyplot as plt
 
 
+
 class LgBeam():
 
     def GenerateLGBeam(self, p, l, w, sizepoints):
