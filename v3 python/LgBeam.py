@@ -1,7 +1,6 @@
 import numpy as np
 import math
 import time
-import matplotlib.pyplot as plt
 from Laguerre import Laguerre
 from Utility import Utility
 from AddGrating import Addgrating
@@ -53,21 +52,29 @@ class LgBeam():
         #replace these with values specified by the user
         gratingAngle = 45
         gratingNum = 50
-        ###################################################
+        ########################################################
         finalHologram = self.GRAT.addBlazedGrating(complexHologram, gratingAngle, gratingNum, sizePoints)
         #finalHologram = self.GRAT.selectGrating(self.gratingType, self,gratingVal, complexHologram, self.Grid)
+        #return finalHologram
         self.UTIL.showImg(finalHologram)
 
 
-    def __init__(self):
+    def __init__(self, p, l, w, grid):
         self.SquareRoot2 = math.sqrt(2)
         self.PI= math.pi
         #when this beam type is called all the values and parameters will be set in this function
         #self.gratingType = 
         #self.gratingVal[0] = gratingAngle
         #self.gratingVal[1] = gratingNum
-        #self.Grid = gridXY
+        #self.Grid = gridXY 
+
+
         self.LAG = Laguerre()
         self.UTIL = Utility()
         self.GRAT = Addgrating()
+        #first parameter is dimension y of grid, 8 not sure, 1 defined by laser used
+        w = self.UTIL.calculateBeamRad(1024, 8, 1)
+        print(w)
+
+        self.GenerateLGBeam(p, l, w, grid)
         
