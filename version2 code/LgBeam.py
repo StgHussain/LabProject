@@ -73,7 +73,7 @@ class LgBeam():
     def showImg(self, img):
         finalMat = [*zip(*img)]
         plt.matshow(finalMat, aspect = 'auto', cmap = plt.get_cmap('gist_gray'))
-        plt.show()
+        #plt.show()
     
     def LaguerreBeam(self, p, l, x, sizeGrid):
         Vals = np.zeros((p+1, 1))

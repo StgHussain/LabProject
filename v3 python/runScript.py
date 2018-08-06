@@ -1,7 +1,9 @@
 from LgBeam import LgBeam
-
-p = 0
+import time
+p = 1
 l = 5
-grid = 1024
+grid = [1920, 1080]
 w = 0.12077
+t1 = time.time()
 newHolo = LgBeam(p, l, w, grid)
+print(time.time() - t1)

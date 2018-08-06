@@ -12,8 +12,8 @@ class Addgrating():
 
     def addBlazedGrating(self, inputHologram, gratingAngle, gratingNum, sizes):
         sizePoints = sizes
-        XXcords = np.linspace(-self.PI, self.PI, sizePoints)
-        YYcords = np.linspace(-self.PI, self.PI, sizePoints)
+        XXcords = np.linspace(-self.PI, self.PI, sizePoints[1])
+        YYcords = np.linspace(-self.PI, self.PI, sizePoints[0])
 
         Xcords, Ycords = np.meshgrid(XXcords, YYcords)
 
@@ -30,4 +30,3 @@ class Addgrating():
 
     def __init__(self):
         self.PI= math.pi
-        print("Amplitude gratings imported")

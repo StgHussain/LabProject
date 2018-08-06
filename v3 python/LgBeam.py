@@ -10,25 +10,31 @@ class LgBeam():
 
     def GenerateLGBeam(self, p, l, w, sizePoints):
         n = sizePoints #change this to match grid sizeS
-        XXcords = np.linspace(-1, 1, sizePoints)
-        YYcords = np.linspace(-1/1, 1/1,  sizePoints) #range/something (both need changing)
+        XXcords = np.linspace(-1, 1, sizePoints[1])
+        YYcords = np.linspace(-1/1, 1/1,  sizePoints[0]) #range/something (both need changing)
         Xcords, Ycords = np.meshgrid(XXcords, YYcords)
 
         [rho, phi] = self.UTIL.cart2pol(Xcords, Ycords)
         #[rho, phi] = self.cart2pol(Xcords, Ycords)
 
-        RhoSquaredOverWSquare = np.zeros((n, n))
+        RhoSquaredOverWSquare = np.zeros((sizePoints[1], sizePoints[0]))
         RhoSquaredOverWSquare = (rho*rho)/(w*w)
-        Values = self.LAG.LaguerreBeam(p, l, 2*RhoSquaredOverWSquare, sizePoints)
-        #Values = self.LaguerreBeam(p, l, 2*RhoSquaredOverWSquare, sizePoints)
+        tim1 = time.time()
+        Values = self.LAG.LaguerreBeam(p, l, 2*RhoSquaredOverWSquare)
+        tim2 = time.time()
+        print("time laguerre")
+        print(tim2-tim1)
 
+        #Values = self.LaguerreBeam(p, l, 2*RhoSquaredOverWSquare, sizePoints)
         factP = math.factorial(p)
         factLP = math.factorial(abs(l) + p)
         Clg = math.sqrt((2*factP/ (self.PI * factLP))) / w
 
-        Result = np.zeros((n, n), dtype=complex)
+
+        Result = np.zeros((sizePoints[0], sizePoints[1]), dtype=complex)
         imgNum = np.multiply(phi, complex(0, -l))
 
+        time1 = time.time()
        #Result calculation 
         RhoSqrt = np.sqrt(RhoSquaredOverWSquare) * self.SquareRoot2
         RhoSqrt = np.power(RhoSqrt, abs(l))
@@ -38,6 +44,9 @@ class LgBeam():
         Res2 = np.multiply(Res2, Clg)
         Result = Res2
         #Results calculated 
+        time2 = time.time()
+        print("time numpy")
+        print(time2 - time1)
 
         ResultNew = [np.abs(number) for number in Result]
         maxResult = np.amax(ResultNew)
@@ -47,7 +56,7 @@ class LgBeam():
         Phi = np.angle(Result)
         Phi = np.multiply(Phi, imaginaryNum)
         Phi = np.exp(Phi)
-        complexHologram = np.zeros((n, n), dtype=complex)
+        complexHologram = np.zeros((sizePoints[0], sizePoints[1]), dtype=complex)
         complexHologram = np.multiply(ResultNew, Phi) 
         #replace these with values specified by the user
         gratingAngle = 45
@@ -73,8 +82,7 @@ class LgBeam():
         self.UTIL = Utility()
         self.GRAT = Addgrating()
         #first parameter is dimension y of grid, 8 not sure, 1 defined by laser used
-        w = self.UTIL.calculateBeamRad(1024, 8, 1)
-        print(w)
-
+        #w = self.UTIL.calculateBeamRad(1024, 8, 1)
+        w = 0.12077
         self.GenerateLGBeam(p, l, w, grid)
         

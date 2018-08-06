@@ -16,6 +16,6 @@ class Utility():
 
     def calculateBeamRad(self, dimPixel, pixelSize, beamRad):
         pixelSize = pixelSize * 0.000001
-        beamRad = beamRad * 1000
-        beamRadPercent =  (beamRad/(dimPixel*pixelSize))
+        beamRad = beamRad * 0.001
+        beamRadPercent =  1/((dimPixel*pixelSize)/beamRad)
         return beamRadPercent
