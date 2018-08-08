@@ -1,6 +1,6 @@
-import numpy as np
-import math
+import numpy as np 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 
 class Utility():
 
@@ -11,7 +11,11 @@ class Utility():
 
     def showImg(self, img):
         finalMat = [*zip(*img)]
+        mpl.rcParams['toolbar'] = 'None'
         plt.matshow(finalMat, aspect = 'auto', cmap = plt.get_cmap('gist_gray'))
+        plt.axis('off')
+        figManager = plt.get_current_fig_manager()
+        figManager.window.showMaximized()
         plt.show()
 
     def calculateBeamRad(self, dimPixel, pixelSize, beamRad):
