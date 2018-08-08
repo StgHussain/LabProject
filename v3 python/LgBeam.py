@@ -30,7 +30,6 @@ class LgBeam():
         factLP = math.factorial(abs(l) + p)
         Clg = math.sqrt((2*factP/ (self.PI * factLP))) / w
 
-
         Result = np.zeros((sizePoints[0], sizePoints[1]), dtype=complex)
         imgNum = np.multiply(phi, complex(0, -l))
 
@@ -83,6 +82,7 @@ class LgBeam():
         self.GRAT = Addgrating()
         #first parameter is dimension y of grid, 8 not sure, 1 defined by laser used
         #w = self.UTIL.calculateBeamRad(1024, 8, 1)
+        #need changes to calculate Beam Radius function 
         w = 0.12077
         self.GenerateLGBeam(p, l, w, grid)
         

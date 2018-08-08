@@ -15,7 +15,7 @@ class Utility():
         plt.matshow(finalMat, aspect = 'auto', cmap = plt.get_cmap('gist_gray'))
         plt.axis('off')
         figManager = plt.get_current_fig_manager()
-        figManager.window.showMaximized()
+        figManager.full_screen_toggle()
         plt.show()
 
     def calculateBeamRad(self, dimPixel, pixelSize, beamRad):
