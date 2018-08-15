@@ -1,12 +1,13 @@
-import numpy as np 
+import numpy as 
+import cupy as cp 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
 class Utility():
 
     def cart2pol(self, x, y):
-        r = np.sqrt(x**2 + y**2)
-        Angle = np.arctan2(y, x)
+        r = cp.sqrt(x**2 + y**2)
+        Angle = cp.arctan2(y, x)
         return(r, Angle)
 
     def showImg(self, img):

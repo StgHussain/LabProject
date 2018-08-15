@@ -19,14 +19,14 @@ class Addgrating():
         XXcords = cp.linspace(-self.PI, self.PI, sizePoints[1])
         YYcords = cp.linspace(-self.PI, self.PI, sizePoints[0])
 
-        Xcords, Ycords = np.meshgrid(XXcords, YYcords)
+        Xcords, Ycords = cp.meshgrid(XXcords, YYcords)
 
         theta = (self.PI/180)* gratingAngle
         plane = math.sin(theta)*Xcords + math.cos(theta)*Ycords
-        phase = np.angle(inputHologram)
+        phase = cp.angle(icputHologram)
     
-        phaseHologram = np.mod(phase + gratingNum*plane, 2*self.PI) - self.PI
-        intensity = np.abs(inputHologram)
+        phaseHologram = cp.mod(phase + gratingNum*plane, 2*self.PI) - self.PI
+        intensity = cp.abs(icputHologram)
 
         phaseHologram = phaseHologram * intensity
         phaseHologram = (phaseHologram - self.PI)/(-2*self.PI)
