@@ -23,10 +23,10 @@ class Addgrating():
 
         theta = (self.PI/180)* gratingAngle
         plane = math.sin(theta)*Xcords + math.cos(theta)*Ycords
-        phase = cp.angle(icputHologram)
+        phase = cp.angle(inputHologram)
     
         phaseHologram = cp.mod(phase + gratingNum*plane, 2*self.PI) - self.PI
-        intensity = cp.abs(icputHologram)
+        intensity = cp.abs(inputHologram)
 
         phaseHologram = phaseHologram * intensity
         phaseHologram = (phaseHologram - self.PI)/(-2*self.PI)
