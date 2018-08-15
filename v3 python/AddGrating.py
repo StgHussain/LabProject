@@ -1,5 +1,9 @@
 import numpy as np
+import cupy as cp
 import math
+from numba import vectorize
+from glumpy import app, gl, glm, gloo
+
 
 class Addgrating():
 
@@ -12,8 +16,8 @@ class Addgrating():
 
     def addBlazedGrating(self, inputHologram, gratingAngle, gratingNum, sizes):
         sizePoints = sizes
-        XXcords = np.linspace(-self.PI, self.PI, sizePoints[1])
-        YYcords = np.linspace(-self.PI, self.PI, sizePoints[0])
+        XXcords = cp.linspace(-self.PI, self.PI, sizePoints[1])
+        YYcords = cp.linspace(-self.PI, self.PI, sizePoints[0])
 
         Xcords, Ycords = np.meshgrid(XXcords, YYcords)
 
