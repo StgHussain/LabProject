@@ -23,5 +23,35 @@ class Laguerre():
                     denom = factPM * factLM * factM2
                     Vals[p - m][0] = (numerator/denom)
             #polyVal if needed
-            PolyCoeff = cp.polyval(Vals, x)
+            Results = cp.zeros(len(x), len(x[0]), dtype = float32)
+            ### GPU Implementation ###
+            PolyCoeff = self.PolyVal(Vals, x, Results)
+            ### END ###
+            #PolyCoeff = cp.polyval(Vals, x)
             return PolyCoeff
+        
+        @cuda.jit
+        def Add(self, A, B):
+            return A + B
+
+        @cuda.jit
+        def Multiply(self, A, B):
+            return A * B
+
+        @cuda.jit
+        def MatrixPower(self, Matrix, power):
+            i = 0
+            for i in range (0, power):
+                Matrix = Matrix * Matrix
+            
+            return Matrix
+
+        @cuda.jit
+        def PolyVal(self, Vals, x, Results):
+            n = len(x) - 1
+            i = 0
+            for i in range (0, len(x)):
+                result = self.MatrixPower(Vals, n - i)
+                Results = Results + result
+
+            return Results
