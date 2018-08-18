@@ -23,7 +23,7 @@ class Laguerre():
                     denom = factPM * factLM * factM2
                     Vals[p - m][0] = (numerator/denom)
             #polyVal if needed
-            Results = cp.zeros(len(x), len(x[0]), dtype = float32)
+            Results = cp.zeros(len(x), len(x[0]), dtype = float)
             ### GPU Implementation ###
             PolyCoeff = self.PolyVal(Vals, x, Results)
             ### END ###
