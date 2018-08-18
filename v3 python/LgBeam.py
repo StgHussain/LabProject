@@ -10,10 +10,11 @@ from AddGrating import Addgrating
 
 class LgBeam():
 
-    @jit.cuda
-    def GPUCalculation(rhoRows, rhoCols, rho, phi, p, l, w, LGBeam, Result):
+    @cuda.jit
+    def GPUCalculation(self, rhoRows, rhoCols, rho, phi, p, l, w, LGBeam, Result):
         imgNum = cp.multiply(phi, complex(0, -l))
-        i, j = 0
+        i = 0
+        j = 0
         for i in range (0, rhoRows):
             for j in range (0, rhoCols):
                 Clg = math.sqrt((2 * math.factorial(p[i, j])) / math.pi * math.factorial(abs(l[i, j] + p[i, j]))) / w
@@ -44,7 +45,7 @@ class LgBeam():
 
         #Values = self.LaguerreBeam(p, l, 2*RhoSquaredOverWSquare, sizePoints)
         ### GPU Calculation Call ###
-        Result = GPUCalculation(rhoRows, rhoCols, rho, phi, p, l, w, Values, Result)
+        Result = self.GPUCalculation(rhoRows, rhoCols, rho, phi, p, l, w, Values, Result)
 
         ### Previous CuPy/Numpy Calculation ###
         """ factP = math.factorial(p)
