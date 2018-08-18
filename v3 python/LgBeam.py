@@ -1,5 +1,6 @@
 import numpy as np
 import cupy as cp
+from numba import cuda
 import math
 import time
 from Laguerre import Laguerre
@@ -9,6 +10,17 @@ from AddGrating import Addgrating
 
 class LgBeam():
 
+    @jit.cuda
+    def GPUCalculation(rhoRows, rhoCols, rho, phi, p, l, w, LGBeam, Result):
+        imgNum = cp.multiply(phi, complex(0, -l))
+        i, j = 0
+        for i in range (0, rhoRows):
+            for j in range (0, rhoCols):
+                Clg = math.sqrt((2 * math.factorial(p[i, j])) / math.pi * math.factorial(abs(l[i, j] + p[i, j]))) / w
+                EValue = Clg * math.pow((math.sqrt(2) * math.sqrt(rho[i, j])), abs(l[i, j])) * LGBeam[i,j] * math.exp(-rho[i, j] * math.exp(imgNum * l[i,j] * phi[i,j]))
+                Result[i, j] = EValue
+        return Result
+    
     def GenerateLGBeam(self, p, l, w, sizePoints):
         n = sizePoints #change this to match grid sizeS
         XXcords = cp.linspace(-1, 1, sizePoints[1])
@@ -16,6 +28,8 @@ class LgBeam():
         Xcords, Ycords = cp.meshgrid(XXcords, YYcords)
 
         [rho, phi] = self.UTIL.cart2pol(Xcords, Ycords)
+        rhoRows = len(rho)
+        rhoCols = len(rho[0])
         #[rho, phi] = self.cart2pol(Xcords, Ycords)
 
         RhoSquaredOverWSquare = cp.zeros((sizePoints[1], sizePoints[0]))
@@ -26,16 +40,21 @@ class LgBeam():
         print("time laguerre")
         print(tim2-tim1)
 
+        Result = cp.zeros((sizePoints[0], sizePoints[1]), dtype=complex)
+
         #Values = self.LaguerreBeam(p, l, 2*RhoSquaredOverWSquare, sizePoints)
-        factP = math.factorial(p)
+        ### GPU Calculation Call ###
+        Result = GPUCalculation(rhoRows, rhoCols, rho, phi, p, l, w, Values, Result)
+
+        ### Previous CuPy/Numpy Calculation ###
+        """ factP = math.factorial(p)
         factLP = math.factorial(abs(l) + p)
         Clg = math.sqrt((2*factP/ (self.PI * factLP))) / w
 
-        Result = cp.zeros((sizePoints[0], sizePoints[1]), dtype=complex)
         imgNum = cp.multiply(phi, complex(0, -l))
 
         time1 = time.time()
-       #Result calculation 
+      
         RhoSqrt = cp.sqrt(RhoSquaredOverWSquare) * self.SquareRoot2
         RhoSqrt = cp.power(RhoSqrt, abs(l))
         mult1 = cp.multiply(RhoSqrt, Values)
@@ -43,10 +62,11 @@ class LgBeam():
         Res2 = cp.multiply(mult1, mult2)
         Res2 = cp.multiply(Res2, Clg)
         Result = Res2
-        #Results calculated 
+        
         time2 = time.time()
         print("time numpy")
-        print(time2 - time1)
+        print(time2 - time1) """
+        ### End of old implementation ###
 
         ResultNew = [cp.abs(number) for number in Result]
         maxResult = cp.amax(ResultNew)
