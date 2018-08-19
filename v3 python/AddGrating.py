@@ -1,8 +1,6 @@
 import numpy as np
 import cupy as cp
 import math
-from numba import vectorize
-from glumpy import app, gl, glm, gloo
 
 
 class Addgrating():

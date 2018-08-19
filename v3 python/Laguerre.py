@@ -1,7 +1,7 @@
 import time
 import numpy as np
 import cupy as cp
-import numba as nb
+from numba import cuda
 import math
 
 class Laguerre():
@@ -23,7 +23,7 @@ class Laguerre():
                     denom = factPM * factLM * factM2
                     Vals[p - m][0] = (numerator/denom)
             #polyVal if needed
-            Results = cp.zeros(len(x), len(x[0]), dtype = float32)
+            Results = cp.zeros(len(x), len(x[0]))
             ### GPU Implementation ###
             PolyCoeff = self.PolyVal(Vals, x, Results)
             ### END ###

@@ -4,8 +4,8 @@ from numba import cuda
 import math
 import time
 from Laguerre import Laguerre
-from Utility import Utility
 from AddGrating import Addgrating
+from Utility import Utility
 
 
 class LgBeam():
