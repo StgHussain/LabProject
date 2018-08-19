@@ -9,4 +9,3 @@ w = 0.12077
 t1 = time.time()
 newHolo = LgBeam(p, l, w, grid)
 print(time.time() - t1)
- 

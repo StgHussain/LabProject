@@ -1,6 +1,5 @@
 import time
 import numpy as np
-import cupy as cp
 from numba import cuda, vectorize, float32
 import math
 
@@ -10,7 +9,7 @@ class Laguerre():
             print("laguerre beam")
 
         def LaguerreBeam(self, p, l, x):
-            Vals = np.zeros((p+1, 1), dtype=float)
+            Vals = np.zeros((p+1, 1))
             if p == 0:
                 Vals = Vals + 1
             else:
