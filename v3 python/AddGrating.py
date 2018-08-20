@@ -1,8 +1,5 @@
 import numpy as np
-import cupy as cp
 import math
-from numba import vectorize
-from glumpy import app, gl, glm, gloo
 
 
 class Addgrating():
@@ -16,17 +13,17 @@ class Addgrating():
 
     def addBlazedGrating(self, inputHologram, gratingAngle, gratingNum, sizes):
         sizePoints = sizes
-        XXcords = cp.linspace(-self.PI, self.PI, sizePoints[1])
-        YYcords = cp.linspace(-self.PI, self.PI, sizePoints[0])
+        XXcords = np.linspace(-self.PI, self.PI, sizePoints[1])
+        YYcords = np.linspace(-self.PI, self.PI, sizePoints[0])
 
-        Xcords, Ycords = cp.meshgrid(XXcords, YYcords)
+        Xcords, Ycords = np.meshgrid(XXcords, YYcords)
 
         theta = (self.PI/180)* gratingAngle
         plane = math.sin(theta)*Xcords + math.cos(theta)*Ycords
-        phase = cp.angle(inputHologram)
+        phase = np.angle(inputHologram)
     
-        phaseHologram = cp.mod(phase + gratingNum*plane, 2*self.PI) - self.PI
-        intensity = cp.abs(inputHologram)
+        phaseHologram = np.mod(phase + gratingNum*plane, 2*self.PI) - self.PI
+        intensity = np.abs(inputHologram)
 
         phaseHologram = phaseHologram * intensity
         phaseHologram = (phaseHologram - self.PI)/(-2*self.PI)
