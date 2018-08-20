@@ -1,5 +1,5 @@
 import numpy as np
-from numba import cuda
+from numba import cuda, vectorize
 import math
 import time
 from Laguerre import Laguerre
@@ -20,17 +20,6 @@ class LgBeam():
                 Result[i, j] = EValue
         return Result
 
-    @cuda.jit('void(complex[:, :], complex[:, :], complex[:, :])')
-    def matmul(A, B, C):
-        i, j = cuda.grid(2)
-        if i >= A.shape[0]:
-            return
-        if i < C.shape[0] and j < C.shape[1]:
-            tmp = 0
-            for k in range(A.shape[1]):
-                tmp += A[i, k] * B[k, j]
-            C[i, j] = tmp
-
     @cuda.jit
     def GPUFactorial(self, x):
         result = 1
@@ -39,14 +28,23 @@ class LgBeam():
         return result
     
     def GenerateLGBeam(self, p, l, w, sizePoints):
+
+        @vectorize(['double(double, double)'], target = "cpu")
+        def matmul(A, B):
+           return A * B
+
+        @vectorize(['complex64(double, complex128)'], target = 'cpu')
+        def matmulComplex(A, B):
+            return A * B
+
         n = sizePoints #change this to match grid sizeS
         XXcords = np.linspace(-1, 1, sizePoints[1])
         YYcords = np.linspace(-1/1, 1/1,  sizePoints[0]) #range/something (both need changing)
         Xcords, Ycords = np.meshgrid(XXcords, YYcords)
 
         [rho, phi] = self.UTIL.cart2pol(Xcords, Ycords)
-        rhoRows = len(rho)
-        rhoCols = len(rho[0])
+        #rhoRows = len(rho)
+        #rhoCols = len(rho[0])
         #[rho, phi] = self.cart2pol(Xcords, Ycords)
 
         RhoSquaredOverWSquare = np.zeros((sizePoints[1], sizePoints[0]))
@@ -57,8 +55,8 @@ class LgBeam():
         print("time laguerre")
         print(tim2-tim1)
 
-        Result = np.zeros((sizePoints[0], sizePoints[1]), dtype=complex)
-        imgNum = np.multiply(phi, complex(0, -l))
+        Result = np.zeros((sizePoints[0], sizePoints[1]), dtype=np.complex64)
+        #imgNum = np.multiply(phi, complex(0, -l))
 
         #Values = self.LaguerreBeam(p, l, 2*RhoSquaredOverWSquare, sizePoints)
         ### GPU Calculation Call ###
@@ -68,27 +66,41 @@ class LgBeam():
         factP = math.factorial(p)
         factLP = math.factorial(abs(l) + p)
         Clg = math.sqrt((2*factP/ (self.PI * factLP))) / w
-
         imgNum = np.multiply(phi, complex(0, -l))
 
         time1 = time.time()
-      
+        RhoSqrt = np.zeros((len(RhoSquaredOverWSquare), len(RhoSquaredOverWSquare[0])), dtype=np.float32)
         RhoSqrt = np.sqrt(RhoSquaredOverWSquare) * self.SquareRoot2
         RhoSqrt = np.power(RhoSqrt, abs(l))
-        mult1 = np.zeros((len(RhoSqrt), len(Values[0])))
+        mult1 = np.zeros((len(RhoSqrt), len(Values[0])), dtype=np.double)
+        mult2 = np.zeros((len(RhoSquaredOverWSquare), len(imgNum[0])), dtype=np.complex64)
+        
         #A_gpu = cuda.to_device(RhoSqrt)
         #B_gpu = cuda.to_device(Values)
         #C_gpu = cuda.device_array((len(RhoSqrt), len(Values[0])), dtype = complex)
-        threadsperblock = 256
-        blockspergrid = (len(RhoSqrt) * len(Values[0]) + (threadsperblock -1)) // threadsperblock
-        matmul[threadsperblock, blockspergrid](RhoSqrt, Values, mult1)
-        mult2 = np.multiply(np.exp(-RhoSquaredOverWSquare), np.exp(imgNum))
-        Res2 = np.multiply(mult1, mult2)
-        Res2 = np.multiply(Res2, Clg)
-        Result = Res2
-        
+        #threadsperblock = 256
+        #blockspergrid = (len(RhoSqrt) * len(Values[0]) + (threadsperblock -1)) // threadsperblock
+        for i in range (0, Values.shape[1]):
+            A = RhoSqrt[:, i]
+            B = Values[:, i]
+            mult1[:, i] = matmul(A, B)
+            A = np.exp(-RhoSquaredOverWSquare[:, i])
+            B = np.exp(imgNum[:, i])
+            mult2[:, i] = matmulComplex(A, B)
+
+        Res2 = np.zeros((mult1.shape[0], mult2.shape[1]), dtype=np.complex64)
+        Result = np.zeros((Res2.shape[0], Res2.shape[1]), dtype = np.complex64)
+        for j in range (0, Res2.shape[1]):
+            Res2[:, i] = matmulComplex(mult1[:, i], mult2[:, 1])
+            Res2[:, i] = matmulComplex(Clg, Res2[:, i])
+            Result[:, i] = Res2[:, i]
+
+        #mult2 = np.multiply(np.exp(-RhoSquaredOverWSquare), np.exp(imgNum))
+        #Res2 = np.multiply(mult1, mult2)
+        #Res2 = np.multiply(Res2, Clg)
+        #Result = Res2
         time2 = time.time()
-        print("time numpy")
+        print("Time GPU Implementation")
         print(time2 - time1)
         ### End of old implementation ###
 
