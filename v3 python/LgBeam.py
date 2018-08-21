@@ -1,7 +1,7 @@
 import numpy as np
 import math
-import time
 from Laguerre import Laguerre
+from BeamParams import BeamParams
 from Utility import Utility
 from AddGrating import Addgrating
 
@@ -9,21 +9,15 @@ from AddGrating import Addgrating
 class LgBeam():
 
     def GenerateLGBeam(self, p, l, w, sizePoints):
-        n = sizePoints #change this to match grid sizeS
         XXcords = np.linspace(-1, 1, sizePoints[1])
         YYcords = np.linspace(-1/1, 1/1,  sizePoints[0]) #range/something (both need changing)
         Xcords, Ycords = np.meshgrid(XXcords, YYcords)
 
         [rho, phi] = self.UTIL.cart2pol(Xcords, Ycords)
-        #[rho, phi] = self.cart2pol(Xcords, Ycords)
 
         RhoSquaredOverWSquare = np.zeros((sizePoints[1], sizePoints[0]))
         RhoSquaredOverWSquare = (rho*rho)/(w*w)
-        tim1 = time.time()
         Values = self.LAG.LaguerreBeam(p, l, 2*RhoSquaredOverWSquare)
-        tim2 = time.time()
-        print("time laguerre")
-        print(tim2-tim1)
 
         #Values = self.LaguerreBeam(p, l, 2*RhoSquaredOverWSquare, sizePoints)
         factP = math.factorial(p)
@@ -33,7 +27,6 @@ class LgBeam():
         Result = np.zeros((sizePoints[0], sizePoints[1]), dtype=complex)
         imgNum = np.multiply(phi, complex(0, -l))
 
-        time1 = time.time()
        #Result calculation 
         RhoSqrt = np.sqrt(RhoSquaredOverWSquare) * self.SquareRoot2
         RhoSqrt = np.power(RhoSqrt, abs(l))
@@ -43,11 +36,6 @@ class LgBeam():
         Res2 = np.multiply(Res2, Clg)
         Result = Res2
         #Results calculated 
-        time2 = time.time()
-        print("time numpy")
-        print(time2 - time1)
-
-        timeRes = time.time()
 
         ResultNew = [np.abs(number) for number in Result]
         maxResult = np.amax(ResultNew)
@@ -57,49 +45,26 @@ class LgBeam():
         Phi = np.angle(Result)
         Phi = np.multiply(Phi, imaginaryNum)
         Phi = np.exp(Phi)
-        timeComS = time.time()
         complexHologram = np.zeros((sizePoints[0], sizePoints[1]), dtype=complex)
         complexHologram = np.multiply(ResultNew, Phi) 
-        timeRes2 = time.time()
-        print("result time")
-        print(timeRes2 - timeRes)
-        #replace these with values specified by the user
-        gratingAngle = 10
-        gratingNum = 0
-        ########################################################
-        timeComE = time.time()
-        print("complex hologram time")
-        print(timeComE - timeComS)
-        x = time.time()
-        #finalHologram = self.GRAT.addBlazedGrating(complexHologram, gratingAngle, gratingNum, sizePoints)
-        y = time.time()
-        print("grating time")
-        print(y - x)
         return complexHologram
-        #finalHologram = self.GRAT.selectGrating(self.gratingType, self,gratingVal, complexHologram, self.Grid)
-        #return finalHologram
-        #self.UTIL.showImg(finalHologram)
-
-    def returnAns(self):
-        return self.x
-
-
-    def __init__(self, p, l, w, grid):
+        
+        
+    def returnBeam(self):
+        return self.result
+        
+    def __init__(self, BeamParam):
+        self.p = BeamParam.getP()
+        self.l = BeamParam.getL()
+        self.grid = BeamParam.getGrid()
         self.SquareRoot2 = math.sqrt(2)
         self.PI= math.pi
-        #when this beam type is called all the values and parameters will be set in this function
-        #self.gratingType = 
-        #self.gratingVal[0] = gratingAngle
-        #self.gratingVal[1] = gratingNum
-        #self.Grid = gridXY 
-
-
+        
         self.LAG = Laguerre()
         self.UTIL = Utility()
-        self.GRAT = Addgrating()
-        #first parameter is dimension y of grid, 8 not sure, 1 defined by laser used
-        #w = self.UTIL.calculateBeamRad(1024, 8, 1)
-        #need changes to calculate Beam Radius function 
-        w = 0.12077
-        self.x = self.GenerateLGBeam(p, l, w, grid)
+        w = 0.12077 ############################## still need to change this
+        
+        self.result = self.GenerateLGBeam(self.p, self.l, w, self.grid)
+       
+
         
