@@ -47,6 +47,8 @@ class LgBeam():
         print("time numpy")
         print(time2 - time1)
 
+        timeRes = time.time()
+
         ResultNew = [np.abs(number) for number in Result]
         maxResult = np.amax(ResultNew)
         ResultNew = ResultNew/maxResult
@@ -55,16 +57,31 @@ class LgBeam():
         Phi = np.angle(Result)
         Phi = np.multiply(Phi, imaginaryNum)
         Phi = np.exp(Phi)
+        timeComS = time.time()
         complexHologram = np.zeros((sizePoints[0], sizePoints[1]), dtype=complex)
         complexHologram = np.multiply(ResultNew, Phi) 
+        timeRes2 = time.time()
+        print("result time")
+        print(timeRes2 - timeRes)
         #replace these with values specified by the user
-        gratingAngle = 45
-        gratingNum = 50
+        gratingAngle = 10
+        gratingNum = 0
         ########################################################
-        finalHologram = self.GRAT.addBlazedGrating(complexHologram, gratingAngle, gratingNum, sizePoints)
+        timeComE = time.time()
+        print("complex hologram time")
+        print(timeComE - timeComS)
+        x = time.time()
+        #finalHologram = self.GRAT.addBlazedGrating(complexHologram, gratingAngle, gratingNum, sizePoints)
+        y = time.time()
+        print("grating time")
+        print(y - x)
+        return complexHologram
         #finalHologram = self.GRAT.selectGrating(self.gratingType, self,gratingVal, complexHologram, self.Grid)
         #return finalHologram
-        self.UTIL.showImg(finalHologram)
+        #self.UTIL.showImg(finalHologram)
+
+    def returnAns(self):
+        return self.x
 
 
     def __init__(self, p, l, w, grid):
@@ -84,5 +101,5 @@ class LgBeam():
         #w = self.UTIL.calculateBeamRad(1024, 8, 1)
         #need changes to calculate Beam Radius function 
         w = 0.12077
-        self.GenerateLGBeam(p, l, w, grid)
+        self.x = self.GenerateLGBeam(p, l, w, grid)
         
