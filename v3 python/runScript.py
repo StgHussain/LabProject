@@ -4,7 +4,7 @@ from numba import vectorize, float32
 import numpy as np
 import tkinter as tk
 
-targetHardware = 'cpu'
+targetHardware = 'cuda'
 
 @vectorize(['complex64(complex64, complex64)'], target = targetHardware)
 def VectorAdd(A, B):
@@ -24,6 +24,6 @@ arr2 = np.ones(size, dtype= np.complex64)
 arr3 = np.zeros(size, dtype = np.complex64)
 
 arr3 = VectorAdd(arr1, arr2)
-#print(arr3)"""
+print(arr3)"""
 
 print(time.time() - t1)
