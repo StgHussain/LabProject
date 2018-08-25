@@ -1,0 +1,70 @@
+from Utility import Utility
+from Blazed import Blazed
+import numpy as np
+
+class Hologram():
+    
+    def returnResult(self):
+        return self.result
+    
+    def defBeams(self, matrixBeams):
+        self.beamList = matrixBeams
+        
+    def defGratings(self, gratings):
+        self.gratingList = gratings
+        
+    def clear(self):
+        self.tempHologram = np.zeros((1920, 1080), dtype = complex)
+    
+    def generateHologram(self):
+        columnNum = 0
+        self.result = list()
+        for columnHologram in self.beamList:
+            for beams in columnHologram:
+                beams.Generate()
+                self.tempHologram = self.tempHologram + beams.returnBeam()     
+            self.result.append(self.tempHologram)
+            self.result[columnNum] = self.ApplySingleGrating(self.result[columnNum], columnNum)
+            self.clear()
+            columnNum = columnNum + 1
+    
+    def generateHologramGrat(self):
+        counter = 0
+        self.result = list()
+        for columnHologram in self.beamList:
+            for beams in columnHologram:
+                beams.Generate()
+                Beam = beams.returnBeam()
+                Beam = self.ApplyMultipleGrating(Beam, counter)
+                self.tempHologram = self.tempHologram + Beam
+                counter = counter + 1
+            self.result.append(self.tempHologram)
+            self.clear()
+        return self.result 
+
+    def ApplySingleGrating(self, beamResult, position):
+        currCol = 0
+        print(self.gratingList)
+        for sublist in self.gratingList:
+            for grating in sublist:
+                if currCol == position:
+                    beamResult = grating.addGrating(beamResult)
+            currCol = currCol + 1
+        return beamResult
+    
+    def ApplyMultipleGrating(self, beamResult, position):
+        count = 0
+        for sublist in self.gratingList:
+            for grating in sublist:
+                if count == position:
+                    beamResult = grating.addGrating(beamResult)
+                count = count + 1
+        return beamResult
+               
+    def __init__(self, gridRes):
+        self.gridRes = gridRes
+        self.beamList = list()
+        self.gratingList = list()
+        self.result = list()
+        self.UTIL = Utility()
+        self.tempHologram = np.zeros((1920, 1080), dtype = complex)
