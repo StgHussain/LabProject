@@ -1,6 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import PIL
 
 class Utility():
 
@@ -10,12 +11,15 @@ class Utility():
         return(r, Angle)
 
     def showImg(self, img):
-        finalMat = [*zip(*img)]
-        mpl.rcParams['toolbar'] = 'None'
-        plt.matshow(finalMat, aspect = 'auto', cmap = plt.get_cmap('gist_gray'))
-        plt.axis('off')
-        figManager = plt.get_current_fig_manager()
-        figManager.full_screen_toggle()
+        #finalMat = [*zip(*img)]
+        #finalMat = img
+        #mpl.rcParams['toolbar'] = 'None'
+        #plt.matshow(finalMat, aspect = 'auto', cmap = plt.get_cmap('gist_gray'))
+        #plt.axis('off')
+        #figManager = plt.get_current_fig_manager()
+        #figManager.full_screen_toggle()
+        #plt.show()
+        imgplot = plt.imshow(img)
         plt.show()
 
     def calculateBeamRad(self, dimPixel, pixelSize, beamRad):

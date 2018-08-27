@@ -7,5 +7,8 @@ l = 5
 grid = [1920, 1080]
 w = 0.12077
 t1 = time.time()
-#newHolo = LgBeam(p, l, w, grid)
-#print(time.time() - t1)
+gratingType = 'blazed'
+gratingAngle = 45
+gratingNum = 20
+newHolo = LgBeam(p, l, w, grid, gratingType, gratingAngle, gratingNum)
+print(time.time() - t1)

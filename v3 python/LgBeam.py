@@ -4,9 +4,10 @@ import time
 from Laguerre import Laguerre
 from Utility import Utility
 from AddGrating import Addgrating
+from BaseBeam import BaseBeam
 
 
-class LgBeam():
+class LgBeam(BaseBeam):
 
     def GenerateLGBeam(self, p, l, w, sizePoints):
         n = sizePoints #change this to match grid sizeS
@@ -19,11 +20,7 @@ class LgBeam():
 
         RhoSquaredOverWSquare = np.zeros((sizePoints[1], sizePoints[0]))
         RhoSquaredOverWSquare = (rho*rho)/(w*w)
-        tim1 = time.time()
         Values = self.LAG.LaguerreBeam(p, l, 2*RhoSquaredOverWSquare)
-        tim2 = time.time()
-        print("time laguerre")
-        print(tim2-tim1)
 
         #Values = self.LaguerreBeam(p, l, 2*RhoSquaredOverWSquare, sizePoints)
         factP = math.factorial(p)
@@ -33,7 +30,6 @@ class LgBeam():
         Result = np.zeros((sizePoints[0], sizePoints[1]), dtype=complex)
         imgNum = np.multiply(phi, complex(0, -l))
 
-        time1 = time.time()
        #Result calculation 
         RhoSqrt = np.sqrt(RhoSquaredOverWSquare) * self.SquareRoot2
         RhoSqrt = np.power(RhoSqrt, abs(l))
@@ -43,9 +39,6 @@ class LgBeam():
         Res2 = np.multiply(Res2, Clg)
         Result = Res2
         #Results calculated 
-        time2 = time.time()
-        print("time numpy")
-        print(time2 - time1)
 
         ResultNew = [np.abs(number) for number in Result]
         maxResult = np.amax(ResultNew)
@@ -64,12 +57,14 @@ class LgBeam():
         finalHologram = self.GRAT.addBlazedGrating(complexHologram, gratingAngle, gratingNum, sizePoints)
         #finalHologram = self.GRAT.selectGrating(self.gratingType, self,gratingVal, complexHologram, self.Grid)
         #return finalHologram
-        self.UTIL.showImg(finalHologram)
+        #self.UTIL.showImg(finalHologram)
 
 
-    def __init__(self, p, l, w, grid):
+    def __init__(self, p, l, w, grid, gratingType, gratingAngle, gratingNum):
         self.SquareRoot2 = math.sqrt(2)
         self.PI= math.pi
+        baseBeam = BaseBeam()
+        baseBeam.defineParams(gratingType, gratingAngle, gratingNum, grid, p, l)
         #when this beam type is called all the values and parameters will be set in this function
         #self.gratingType = 
         #self.gratingVal[0] = gratingAngle
