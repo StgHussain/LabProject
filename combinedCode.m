@@ -254,9 +254,9 @@ beamRadius = 1; %mm
 mat = LGHologram(sizeGrid,p,l,CalculateBeamRadius(sizeGrid(2),8,beamRadius));
 %ComplexFigure(mat);
 
-gratingMat = AddGrating(mat,gratingNumber,gratingAngle,complexAmplitude);
+#gratingMat = AddGrating(mat,gratingNumber,gratingAngle,complexAmplitude);
 
-#ShowImage(gratingMat);
+ShowImage(gratingMat);
 
 totalTimeEnd = toc(totalTimeStart);
 time1 = sprintf('%.4f', totalTimeEnd);

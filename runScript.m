@@ -1,4 +1,4 @@
-testSize = 10;
+testSize = 1;
 tic()
 toc()
 runTimes = [testSize];
